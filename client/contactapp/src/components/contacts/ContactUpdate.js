@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { createContact } from "../../actions/contacts";
+import { updateContact } from "../../actions/contacts";
+import { getContactObj } from "../../services/ contact-service";
 
-
-
-export const AddContact = (props) => {
+export const UpdateContact = (props) => {
     const intialContactState = {
         name: "",
         phone: "",
@@ -12,38 +11,55 @@ export const AddContact = (props) => {
         address: "",
 
     }
+
     const [contact, setContact] = useState(intialContactState);
     const dispatch = useDispatch();
+
+    const getContact = (id) => {
+        console.log("gsga", id)
+        getContactObj(id).then(res => {
+            setContact(res.data);
+            console.log("data", res.data)
+
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+    useEffect(() => {
+        getContact(props.match.params.id);
+
+    }, [props.match.params.id]);
+
     const handleInputChange = event => {
         const { name, value } = event.target;
         setContact({ ...contact, [name]: value });
     };
 
-    const saveContact = (props) => {
-        console.log("eneterd", contact)
-        const { name, phone, email, address } = contact;
-        dispatch(createContact(name, phone, email, address))
-            .then(data => {
-                console.log("data", data)
-                setContact({
-                    name: data.name,
-                    phone: data.phone,
-                    email: data.email,
-                    address: data.address
-                })
+
+    const saveContact = () => {
+        console.log("all data", contact)
+        const data = {
+            name: contact.name,
+            phone: contact.phone,
+            email: contact.email,
+            address: contact.address
+        };
+        dispatch(updateContact(contact._id, data))
+            .then(response => {
+                console.log(response);
+                setContact({ ...contact });
                 props.history.push("/");
                 window.location.reload();
-
             })
             .catch(e => {
-                console.log("error", e);
+                console.log(e);
             });
-    }
+    };
 
     return (
         <div className="submit-form">
             <div className="w-25 p-3">
-                <h2>Add contact</h2>
+                <h2>Update contact</h2>
                 <div className="form-group">
                     <label htmlFor="title">Name</label>
                     <input
@@ -90,7 +106,7 @@ export const AddContact = (props) => {
                         name="address"
                     />
                 </div>
-                <button onClick={saveContact} className="btn btn-success">
+                <button className="btn btn-success" onClick={saveContact}>
                     Submit
                 </button>
             </div>

@@ -5,8 +5,8 @@ We will import all the list of actions from type.js and make asynchronous reques
 import {
     CREATE_CONTACTS,
     RETRIEVE_CONTACTS,
-    // UPDATE_CONTACTS,
-    // DELETE_CONTACTS,
+    UPDATE_CONTACTS,
+    DELETE_CONTACTS,
 } from "./types"
 import { create, getContacts, getContactsId, update, remove } from "../services/ contact-service";
 
@@ -16,6 +16,21 @@ export const createContact = (name, phone, email, address) => async (dispatch) =
         const res = await create(name, phone, email, address);
         dispatch({
             type: CREATE_CONTACTS,
+            payload: res.data
+        });
+        return Promise.data(res.data)
+    } catch (err) {
+        return Promise.reject(err)
+    }
+}
+
+//update contacts
+export const updateContact = (id, data) => async (dispatch) => {
+    try {
+        console.log("res", id, data)
+        const res = await update(id, data);
+        dispatch({
+            type: UPDATE_CONTACTS,
             payload: res.data
         });
         return Promise.data(res.data)
@@ -38,3 +53,15 @@ export const retrieveContacts = () => async (dispatch) => {
     }
 }
 
+//delete contacts
+export const deleteContacts = (id) => async (dispatch) => {
+    try {
+        const res = await remove(id);
+        dispatch({
+            type: DELETE_CONTACTS,
+            payload: { id },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};

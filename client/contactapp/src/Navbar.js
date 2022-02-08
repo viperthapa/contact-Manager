@@ -14,6 +14,12 @@ export const Navbar = () => {
         }
     }, []);
 
+    //logout the user
+    const logout = () => {
+        localStorage.clear();
+        window.location.href = "/login";
+
+    }
 
     return (
         <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -35,7 +41,7 @@ export const Navbar = () => {
                     </li>
                     <li className="nav-item">
                         <a className="nav-link">
-                            <h4>Logout</h4>
+                            <button style={{ border: "None", backgroundColor: "black", color: "whitesmoke" }} onClick={() => logout()}><h5>Logout</h5></button>
                         </a>
                     </li>
                 </div>

@@ -6,6 +6,7 @@ import Register from '../src/components/Register';
 import Login from '../src/components/Login';
 import { ContactList } from "./components/contacts/ContactList";
 import { AddContact } from "./components/contacts/ContactAdd";
+import { UpdateContact } from "./components/contacts/ContactUpdate";
 import { Error } from './error'
 import "./App.css";
 
@@ -20,6 +21,7 @@ function App() {
         <Route exact path={["/register"]} component={Register} />
         <Route exact path={["/login"]} component={Login} />
         <Route exact path={["/add-contact"]} component={AddContact} />
+        <Route exact path={["/update-contact/:id"]} component={UpdateContact} />
         <Route exact path={["*"]} component={Error} />
       </Switch>
     </div>

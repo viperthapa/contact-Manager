@@ -8,8 +8,9 @@ export const getContacts = () => {
 }
 
 //detail page of contact
-export const getContactsId = () => {
-    return axios.get(API_URL + "api/contacts/${id}", { headers: authHeader() })
+export const getContactObj = (id) => {
+    const res = axios.get(API_URL + "api/contacts/" + id, { headers: authHeader() })
+    return res
 }
 
 //create contact
@@ -22,10 +23,12 @@ export const create = (name, phone, email, address) => {
 
 //update contact
 export const update = (id, data) => {
-    return axios.put(API_URL + "api/contacts/${id}", data, { headers: authHeader() });
+    console.log("id", id)
+    const res = axios.put(API_URL + "api/contacts/" + id, data, { headers: authHeader() });
+    console.log("res", res.data)
 };
 
 //delete contact
-const remove = (id) => {
-    return axios.delete(API_URL + "api/contacts/${id}", { headers: authHeader() });
+export const remove = (id) => {
+    return axios.delete(API_URL + "api/contacts/" + id, { headers: authHeader() });
 };
