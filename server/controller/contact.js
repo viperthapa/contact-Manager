@@ -34,11 +34,6 @@ exports.show = async function (req, res, next) {
 
 //create contacts
 exports.create = async function (req, res, next) {
-    const contacts = req.body
-    console.log("request body", req.body)
-    console.log("request body image", req.file)
-    console.log("__dirname", __dirname)
-
     const { phone, email } = req.body;
 
     //Validate the phone number
@@ -46,17 +41,16 @@ exports.create = async function (req, res, next) {
     if (oldPhone) {
         res.status(409).send({ message: "User with this phone already exist!" })
     }
-
+    console.log("entered in to services")
     //check email already exist 
     const oldEmail = await Contact.findOne({ email });
     if (oldEmail) {
         res.status(409).send({ message: "User with this email already exist!" })
     }
-    console.log("uploads", path.join(process.cwd() + '/uploads/' + req.file.filename))
+    console.log("entered in to services2")
 
-    const { name, address } = req.body;
-
-    const newContact = new Contact({ name, phone, email, address })
+    console.log("req body", req.body)
+    const newContact = new Contact({ name: req.body.name, phone: req.body.phone, email: req.body.email, address: req.body.address })
 
     try {
         // newContact.img.data = fs.readFileSync(path.join(process.cwd() + '/' + req.file.path));
@@ -94,9 +88,9 @@ exports.create = async function (req, res, next) {
 exports.update = async function (req, res, next) {
     try {
         const { id } = req.params
-        const { name, phone, email, address, img } = req.body;
+        const { name, phone, email, address, img, isFavourite } = req.body;
         if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-        const updatedContact = { name, phone, email, address, img, _id: id };
+        const updatedContact = { name, phone, email, address, img, isFavourite: Boolean(isFavourite), _id: id };
         await Contact.findByIdAndUpdate(id, updatedContact, { new: true });
         res.json(updatedContact);
     } catch (err) {

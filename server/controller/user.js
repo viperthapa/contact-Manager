@@ -77,14 +77,16 @@ exports.loginUser = (req, res) => {
                 return res.status(401).send({ message: "Invalid Password!" });
             }
             console.log("user", user.id)
-            var token = jwt.sign({ id: user.id }, config.secret, {
-                expiresIn: 600, // expires in 10 min
-            });
+
+            const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: config.tokenLife });
+            const refreshToken = jwt.sign({ id: user.id }, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
+
             res.status(200).send({
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                token: token
+                token: token,
+                refreshToken: refreshToken
             });
 
         });

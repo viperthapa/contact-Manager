@@ -41,7 +41,7 @@ console.log("upload", upload)
 //register
 router.get('/contacts', auth, contactsController.contacts); //display all data of contacts
 router.get('/contacts/:id', auth, contactsController.show); //display single data of contacts
-router.post('/contacts', auth, upload.single('image'), contactsController.create);
+router.post('/contacts', auth, contactsController.create);
 router.put('/contacts/:id', auth, upload.single('image'), contactsController.update);
 router.delete('/contacts/:id', auth, upload.single('image'), contactsController.delete);
 

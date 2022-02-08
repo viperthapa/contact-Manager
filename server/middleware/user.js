@@ -3,6 +3,35 @@ const jwt = require("jsonwebtoken");
 
 const config = process.env;
 
+//function to verify bearer token 
+function verifyToken(req, res, next) {
+    console.log("token enterd")
+    const bearerHeader = req.headers['authorization'];
+    console.log("bearer header", bearerHeader)
+    if (bearerHeader) {
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        console.log("bearer token", bearerToken)
+        req.token = bearerToken;
+        next();
+    } else {
+        // Forbidden
+        res.status(403).send({ error: "A token is required for authentication" });
+    }
+}
+module.exports = verifyToken;
+
+// export default function authHeader() {
+//     const user = JSON.parse(localStorage.getItem('user_data'));
+//     if (user && user.accessToken) {
+//       // for Node.js Express back-end
+//       return { 'x-access-token': user.accessToken };
+//     } else {
+//       return {};
+//     }
+//   }
+
+
 // const verifyToken = (req, res, next) => {
 //     console.log("verify token", req.body.token)
 //     const token =
@@ -19,18 +48,3 @@ const config = process.env;
 //     }
 //     return next();
 // };
-
-//function to verify bearer token 
-function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
-    if (bearerHeader) {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        // Forbidden
-        res.status(403).send({ error: "A token is required for authentication" });
-    }
-}
-module.exports = verifyToken;
