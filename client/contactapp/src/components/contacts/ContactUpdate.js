@@ -9,6 +9,7 @@ export const UpdateContact = (props) => {
         phone: "",
         email: "",
         address: "",
+        isFavourite: false
 
     }
 
@@ -17,6 +18,7 @@ export const UpdateContact = (props) => {
 
     const getContact = (id) => {
         getContactObj(id).then(res => {
+            console.log("res data", res.data)
             setContact(res.data);
 
         }).catch(e => {
@@ -30,7 +32,8 @@ export const UpdateContact = (props) => {
 
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setContact({ ...contact, [name]: value });
+        setContact({ ...contact, [name]: name === "isFavourite" ? !contact.isFavourite : value });
+
     };
 
 
@@ -39,7 +42,8 @@ export const UpdateContact = (props) => {
             name: contact.name,
             phone: contact.phone,
             email: contact.email,
-            address: contact.address
+            address: contact.address,
+            isFavourite: contact.isFavourite
         };
         dispatch(updateContact(contact._id, data))
             .then(response => {
@@ -100,6 +104,12 @@ export const UpdateContact = (props) => {
                         onChange={handleInputChange}
                         name="address"
                     />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">Favourite{contact.isFavourite}</label>
+                    <input type="checkbox" name="isFavourite" value={contact.isFavourite} checked={contact.isFavourite} onChange={handleInputChange}
+                    />
+
                 </div>
                 <button className="btn btn-success" onClick={saveContact}>
                     Submit

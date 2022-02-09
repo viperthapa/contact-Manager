@@ -10,19 +10,22 @@ export const AddContact = (props) => {
         phone: "",
         email: "",
         address: "",
+        isFavourite: false,
 
     }
     const [contact, setContact] = useState(intialContactState);
     const dispatch = useDispatch();
     const handleInputChange = event => {
         const { name, value } = event.target;
-        setContact({ ...contact, [name]: value });
+        setContact({ ...contact, [name]: name === "isFavourite" ? !contact.isFavourite : value });
+
     };
 
     const saveContact = (e) => {
         e.preventDefault();
-        const { name, phone, email, address } = contact;
-        dispatch(createContact(name, phone, email, address))
+        const { name, phone, email, address, isFavourite } = contact;
+        console.log("favourite11", isFavourite)
+        dispatch(createContact(name, phone, email, address, isFavourite))
             .then(data => {
                 props.history.push("/");
             })
@@ -80,6 +83,12 @@ export const AddContact = (props) => {
                         onChange={handleInputChange}
                         name="address"
                     />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">Favourite</label>
+                    <input type="checkbox" name="isFavourite" value={contact.isFavourite} onChange={handleInputChange}
+                    />
+
                 </div>
                 <button onClick={saveContact} className="btn btn-success">
                     Submit

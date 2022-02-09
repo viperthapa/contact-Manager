@@ -14,10 +14,10 @@ export const getContactObj = (id) => {
 }
 
 //create contact
-export const create = async (name, phone, email, address) => {
+export const create = async (name, phone, email, address, isFavourite) => {
     try {
         const res = await axios.post(API_URL + "api/contacts/", {
-            name, phone, email, address
+            name, phone, email, address, isFavourite
         }, { headers: authHeader() })
         return res
     } catch (error) {

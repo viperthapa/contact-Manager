@@ -11,9 +11,9 @@ import {
 import { create, getContacts, update, remove } from "../services/ contact-service";
 
 //create 
-export const createContact = (name, phone, email, address) => async (dispatch) => {
+export const createContact = (name, phone, email, address, isFavourite) => async (dispatch) => {
     try {
-        const res = await create(name, phone, email, address);
+        const res = await create(name, phone, email, address, isFavourite);
         dispatch({
             type: CREATE_CONTACTS,
             payload: res.data
