@@ -6,7 +6,6 @@ const config = require("../config/config");
 
 //function to register the user details
 exports.registerUser = async function (req, res) {
-    console.log("executed")
     try {
         //Get the user input 
         const { email, password } = req.body;
@@ -76,7 +75,6 @@ exports.loginUser = (req, res) => {
             if (!passwordIsValid) {
                 return res.status(401).send({ message: "Invalid Password!" });
             }
-            console.log("user", user.id)
 
             const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: config.tokenLife });
             const refreshToken = jwt.sign({ id: user.id }, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })

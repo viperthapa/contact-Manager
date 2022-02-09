@@ -19,21 +19,12 @@ export const AddContact = (props) => {
         setContact({ ...contact, [name]: value });
     };
 
-    const saveContact = (props) => {
-        console.log("eneterd", contact)
+    const saveContact = (e) => {
+        e.preventDefault();
         const { name, phone, email, address } = contact;
         dispatch(createContact(name, phone, email, address))
             .then(data => {
-                console.log("data", data)
-                setContact({
-                    name: data.name,
-                    phone: data.phone,
-                    email: data.email,
-                    address: data.address
-                })
                 props.history.push("/");
-                window.location.reload();
-
             })
             .catch(e => {
                 console.log("error", e);

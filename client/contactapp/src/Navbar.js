@@ -35,9 +35,9 @@ export const Navbar = () => {
             {currentUser ? (
                 <div className="navbar-nav" style={{ marginLeft: "80rem" }}>
                     <li className="nav-item">
-                        <Link className="nav-link">
+                        <div className="nav-link">
                             <h4>Welcome:{currentUser.email}</h4>
-                        </Link>
+                        </div>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link">

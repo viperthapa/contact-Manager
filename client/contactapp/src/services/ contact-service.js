@@ -14,18 +14,22 @@ export const getContactObj = (id) => {
 }
 
 //create contact
-export const create = (name, phone, email, address) => {
-    const res = axios.post(API_URL + "api/contacts/", {
-        name, phone, email, address
-    }, { headers: authHeader() });
-    return res.data
-}
+export const create = async (name, phone, email, address) => {
+    try {
+        const res = await axios.post(API_URL + "api/contacts/", {
+            name, phone, email, address
+        }, { headers: authHeader() })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+
+};
+
 
 //update contact
-export const update = (id, data) => {
-    console.log("id", id)
-    const res = axios.put(API_URL + "api/contacts/" + id, data, { headers: authHeader() });
-    console.log("res", res.data)
+export const update = async (id, data) => {
+    return await axios.put(API_URL + "api/contacts/" + id, data, { headers: authHeader() });
 };
 
 //delete contact

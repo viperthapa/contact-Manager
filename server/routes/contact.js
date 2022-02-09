@@ -12,7 +12,6 @@ var storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: (req, file, cb) => {
-        console.log("orginal name", file.originalname)
         cb(null, new Date().toISOString());
         // cb(null, file.fieldname + '-' + Date.now())
     }
@@ -35,7 +34,6 @@ var storage = multer.diskStorage({
 //     fileFilter: fileFilter
 // });
 var upload = multer({ storage: storage });
-console.log("upload", upload)
 
 
 //register

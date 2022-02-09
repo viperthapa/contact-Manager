@@ -16,10 +16,8 @@ export const UpdateContact = (props) => {
     const dispatch = useDispatch();
 
     const getContact = (id) => {
-        console.log("gsga", id)
         getContactObj(id).then(res => {
             setContact(res.data);
-            console.log("data", res.data)
 
         }).catch(e => {
             console.log(e);
@@ -37,7 +35,6 @@ export const UpdateContact = (props) => {
 
 
     const saveContact = () => {
-        console.log("all data", contact)
         const data = {
             name: contact.name,
             phone: contact.phone,
@@ -46,10 +43,8 @@ export const UpdateContact = (props) => {
         };
         dispatch(updateContact(contact._id, data))
             .then(response => {
-                console.log(response);
-                setContact({ ...contact });
                 props.history.push("/");
-                window.location.reload();
+                // window.location.reload();
             })
             .catch(e => {
                 console.log(e);

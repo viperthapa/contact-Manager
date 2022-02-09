@@ -8,7 +8,7 @@ import {
     UPDATE_CONTACTS,
     DELETE_CONTACTS,
 } from "./types"
-import { create, getContacts, getContactsId, update, remove } from "../services/ contact-service";
+import { create, getContacts, update, remove } from "../services/ contact-service";
 
 //create 
 export const createContact = (name, phone, email, address) => async (dispatch) => {
@@ -18,7 +18,6 @@ export const createContact = (name, phone, email, address) => async (dispatch) =
             type: CREATE_CONTACTS,
             payload: res.data
         });
-        return Promise.data(res.data)
     } catch (err) {
         return Promise.reject(err)
     }
@@ -27,13 +26,11 @@ export const createContact = (name, phone, email, address) => async (dispatch) =
 //update contacts
 export const updateContact = (id, data) => async (dispatch) => {
     try {
-        console.log("res", id, data)
         const res = await update(id, data);
         dispatch({
             type: UPDATE_CONTACTS,
             payload: res.data
         });
-        return Promise.data(res.data)
     } catch (err) {
         return Promise.reject(err)
     }
@@ -43,7 +40,6 @@ export const updateContact = (id, data) => async (dispatch) => {
 export const retrieveContacts = () => async (dispatch) => {
     try {
         const res = await getContacts();
-        console.log("res", res.data)
         dispatch({
             type: RETRIEVE_CONTACTS,
             payload: res.data,
@@ -56,7 +52,7 @@ export const retrieveContacts = () => async (dispatch) => {
 //delete contacts
 export const deleteContacts = (id) => async (dispatch) => {
     try {
-        const res = await remove(id);
+        await remove(id);
         dispatch({
             type: DELETE_CONTACTS,
             payload: { id },

@@ -41,20 +41,15 @@ exports.create = async function (req, res, next) {
     if (oldPhone) {
         res.status(409).send({ message: "User with this phone already exist!" })
     }
-    console.log("entered in to services")
     //check email already exist 
     const oldEmail = await Contact.findOne({ email });
     if (oldEmail) {
         res.status(409).send({ message: "User with this email already exist!" })
     }
-    console.log("entered in to services2")
 
-    console.log("req body", req.body)
     const newContact = new Contact({ name: req.body.name, phone: req.body.phone, email: req.body.email, address: req.body.address })
 
     try {
-        // newContact.img.data = fs.readFileSync(path.join(process.cwd() + '/' + req.file.path));
-        // newContact.img.contentType = 'image/png'
         await newContact.save();
 
         res.status(201).json(newContact);
@@ -62,25 +57,6 @@ exports.create = async function (req, res, next) {
         res.status(409).json({ message: error.message });
     }
 
-    // var obj = {
-    //     name: req.body.name,
-    //     phone: req.body.phone,
-    //     email: req.body.email,
-    //     address: req.body.address,
-    //     img: {
-    //         data: fs.readFileSync(path.join(process.cwd() + '/' + req.file.path)),
-    //         contentType: 'image/png'
-    //     }
-    // }
-    // // console.log("executed", obj._id)
-    // Contact.create(obj, (err, item) => {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-    //     else {
-    //         res.status(201).json(obj);
-    //     }
-    // });
 
 }
 
