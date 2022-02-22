@@ -22,7 +22,6 @@ app.use(router)
 app.use("/user", userRoutes)
 app.use("/api", contactRoutes)
 
-
 const { API_PORT } = process.env;
 const port = process.env.PORT || 5000;
 
