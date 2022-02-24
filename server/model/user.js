@@ -4,9 +4,17 @@ const mongoose = require("mongoose");
 
 //Define a schema for User
 const userSchema = new mongoose.Schema({
-    email: { type: String, unique: true },
+    name: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 40,
+      },
+    email: { type: String, unique: true,required:true },
     password: { type: String },
     token: { type: String },
+    created_at: { type: Date, default: Date.now },
+
 })
 
 //Export function to create "User" model class
