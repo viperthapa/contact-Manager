@@ -8,6 +8,5 @@ var contactRoutes = require('./routes/contact');
 router.use(authRoutes);
 router.use(contactRoutes);
 
+
 module.exports = router;
-
-
