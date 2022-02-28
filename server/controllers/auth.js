@@ -1,11 +1,12 @@
 
+require('dotenv').config()
 const auth = require("../middleware/user");
-const config = require("../config/config");
 const validateRegisterUser = require("../validations/auth/createAuth")
 const validateLoginUser = require("../validations/auth/requestAuth")
 const userServices = require("../services/auth/createAuth")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user")
 
 /**
  * Register the users.
@@ -26,6 +27,7 @@ exports.register = async function (req, res) {
 
     try {
         const createUser = await userServices.create(req.body)
+        console.log("user created successfully",createUser)
         res.status(201).json(createUser);
     } catch (err) {
         console.log(err);
@@ -40,9 +42,6 @@ exports.register = async function (req, res) {
 * @returns
 */
 exports.login  = async function(req,res) {
-    console.log("res body",req.body)
-    console.log("res passowrd",req.body.password)
-
     //validation using joi 
     const validatedData = validateLoginUser(req.body);
 
@@ -62,17 +61,33 @@ exports.login  = async function(req,res) {
     if (!passwordIsValid) {
         return res.status(401).send({ message: "Invalid Password!" });
     }
+    const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+    const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN)
 
-    const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: config.tokenLife });
-    const refreshToken = jwt.sign({ id: user.id }, config.refreshTokenSecret, { expiresIn: config.refreshTokenLife })
 
     res.status(200).send({
         id: user._id,
         username: user.username,
         email: user.email,
-        token: token,
-        refreshToken: refreshToken
+        access_token: access_token,
+        refreshToken:refreshToken
     });
 
 };
+
+exports.token = async function(req,res){
+    const refreshToken = req.body.token
+    console.log("refreshToken",refreshToken)
+    //check if token is null
+    if (refreshToken == null) return res.sendStatus(401).send({ message: "Invalid token!" });
+    //find user
+    const user =  await User.findOne({ refresh_token:refreshToken });
+    console.log("user",user)
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
+        if (err) return res.sendStatus(403)
+        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+        res.json({ accessToken: accessToken })
+      })
+}
 
