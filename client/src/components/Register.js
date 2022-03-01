@@ -31,6 +31,7 @@ const validEmail = (value) => {
 const Register = (props) => {
     const form = useRef();
     const checkBtn = useRef();
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [successful, setSuccessful] = useState(false);
@@ -45,6 +46,10 @@ const Register = (props) => {
         const password = e.target.value;
         setPassword(password);
     };
+    const onChangeName = (e) => {
+        const name = e.target.value;
+        setName(name);
+    };
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -52,7 +57,7 @@ const Register = (props) => {
         setSuccessful(false);
         form.current.validateAll();
         if (checkBtn.current.context._errors.length === 0) {
-            register(email, password).then(
+            register(name,email, password).then(
                 (response) => {
                     props.history.push("/login")
                     setMessage(response.data.message);
@@ -84,6 +89,17 @@ const Register = (props) => {
                     {!successful && (
                         <div>
                             <div className="form-group">
+                                <label htmlFor="email">Name</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    value={name}
+                                    onChange={onChangeName}
+                                    validations={[required]}
+                                />
+                            </div>
+                            <div className="form-group">
                                 <label htmlFor="email">Email</label>
                                 <Input
                                     type="text"
@@ -105,7 +121,7 @@ const Register = (props) => {
                                     validations={[required]}
                                 />
                             </div>
-                            <div className="form-group">
+                            <div className="form-group mt-2">
                                 <button className="btn btn-primary btn-block">Sign Up</button>
                             </div>
                         </div>
