@@ -61,12 +61,13 @@ exports.login  = async function(req,res) {
     if (!passwordIsValid) {
         return res.status(401).send({ message: "Invalid Password!" });
     }
-    const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+    const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN)
 
-
+    console.log("user",user)
     res.status(200).send({
         id: user._id,
+        full_name:user.name,
         username: user.username,
         email: user.email,
         access_token: access_token,
@@ -86,7 +87,7 @@ exports.token = async function(req,res){
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
         if (err) return res.sendStatus(403)
-        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
         res.json({ accessToken: accessToken })
       })
 }

@@ -3,7 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { login } from '../services/auth-service'
-
+import { ShowToastr } from "../common/Toastr";
 const required = (value) => {
     if (!value) {
         return (
@@ -37,8 +37,8 @@ const Login = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             login(email, password).then(
                 () => {
+                    ShowToastr("Login successful!")
                     props.history.push("/");
-                    window.location.reload();
                 },
                 (error) => {
                     const resMessage =
@@ -86,7 +86,7 @@ const Login = (props) => {
                             validations={[required]}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mt-3">
                         <button className="btn btn-primary btn-block" disabled={loading}>
                             {loading && (
                                 <span className="spinner-border spinner-border-sm"></span>

@@ -37,12 +37,13 @@ exports.detail = async function(contactId){
  * @returns {Promise}
 */
 exports.create = async function(data){
-    const {name,email,phone,address} = data
     // validate
     const newContact = new Contact(data);
     try {
-      await newContact.save();
+        console.log("succesfuly created")
+      return await newContact.save();
     } catch (error) {
+        console.log("error",error)
         res.status(409).json({ message: error.message });
     }
 }

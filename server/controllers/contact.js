@@ -54,15 +54,19 @@ exports.show = async function (req, res, next) {
 * @returns
 */
 exports.create = async function (req, res, next) {
-    const checkValidate = validateCreateContact(req.body)
-    if (Object.keys(checkValidate).length!==0){
-        res.status(400).send({ status: 400, error:checkValidate  })}
-    req.body.userid = req.user.id
-    const contactCreate = ContactService.create(req.body).then(contact => res.status(201).json(contact))
-    .catch(next);
+    try{
 
-    console.log("contact create",contactCreate)
-    // return res.status(201).send({ status: 201, data: contactCreate, message: "Contact successfully created!" });
+        const checkValidate = validateCreateContact(req.body)
+        if (Object.keys(checkValidate).length!==0){
+            res.status(400).send({ status: 400, error:checkValidate  })}
+        req.body.userid = req.user.id
+        const contactCreate = await ContactService.create(req.body)
+        console.log("contact create**",contactCreate)
+        return res.status(201).json({ data: contactCreate });
+
+    } catch(err){
+        throw err
+    }
 }
 
 
