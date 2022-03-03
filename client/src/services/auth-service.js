@@ -12,13 +12,11 @@ export const register = (name,email, password) => {
 
 //login the user
 export const login = (email, password) => {
-    console.log("emai passowrd",email,password)
     return axios.post(API_URL + "login/", {
         email,
         password
     }).then((res) => {
         //get the token and save it into localstorage 
-        console.log("token",res.data)
         if (res.data.access_token) {
             localStorage.setItem("user_data", JSON.stringify(res.data));
         }

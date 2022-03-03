@@ -11,14 +11,15 @@ import {
 import { create, getContacts, update, remove } from "../services/ contact-service";
 
 //create 
-export const createContact = (name, phone, email, address, isFavourite) => async (dispatch) => {
+export const createContact = (name, phone, email, address, isFavourite,profile) => async (dispatch) => {
     try {
-        const res = await create(name, phone, email, address, isFavourite);
+        const res = await create(name, phone, email, address, isFavourite,profile);
         dispatch({
             type: CREATE_CONTACTS,
             payload: res.data
         });
     } catch (err) {
+        console.log("error",err)
         return Promise.reject(err)
     }
 }

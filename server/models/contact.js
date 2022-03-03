@@ -6,10 +6,13 @@ const contactSchema = new mongoose.Schema({
     name: { type: String, maxLength: 50,required:true,trim: true },
     // phone: {  type: Array, validate: (v) => Array.isArray(v) && Array.length >= 0,
     // },
-    phone:{ type:Number },
+    phone: {
+        type: Array,
+        validate: (value) => Array.isArray(value) && Array.length >= 0,
+      },
     email: { type: String, required: true,trim: true },
     address: { type: String, maxLength: 50,trim: true },
-    image: { data: Buffer, contentType: String },
+    profile: { type: String,required: true,minlength: 5,trim: true, },
     isFavourite: { type: Boolean, default: false,trim: true },
     created_at:{type:Date},
     updated_at:{type:Date}

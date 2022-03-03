@@ -6,15 +6,10 @@ import '../../../src/App.css'
 import { deleteContacts, retrieveContacts } from "../../actions/contacts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen,faEye, faTrash,faHeart,faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import { Card,ListGroup } from 'react-bootstrap';
 
 
 export const ContactListNew = (props) => {
     const contacts = useSelector((state) => state.contactReducer)
-    console.log("contacts1",contacts.retreieve_data)
-    console.log("contacts12",typeof(contacts))
-
-
     const dispatch = useDispatch();
     const [isLogin, setIsLogin] = useState(false);
     const [detail, setDetail] = useState(null);
@@ -33,12 +28,12 @@ export const ContactListNew = (props) => {
         setDetail(value)
 
     }
-    console.log("detail",detail)
     const removeContact = (value) => {
         dispatch(deleteContacts(value._id))
             .then(() => {
                 props.history.push("/");
-                window.location.reload();
+                window.location.reload(true);
+
 
             })
             .catch(e => {
@@ -62,14 +57,24 @@ export const ContactListNew = (props) => {
                     <td>{index+1}</td>
                     <td>{item.name}</td>
                     <td>{item.email}</td>
-                    <td>{item.phone}</td>
+                    {/* <td>{item.phone}</td> */}
+                    <td className="table-phone">{item.phone.map((element,index) => {
+                        return (
+                          <span key={element._id}>
+                          <p>Home: {element.home}</p>
+                          <p>Work: {element.work}</p>
+                          <p>Mobile: {element.mobile}</p>
+                        </span>
+                        )
+                    })}</td>
                     { item.isFavourite ? 
-                    <td> <FontAwesomeIcon icon={faHeart} className="hover:text-red-300"></FontAwesomeIcon></td>:<td></td>
+                    <td> <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon></td>:<td></td>
                     }
+                    
                     <td className='action'>
                         <button className='button' onClick={() => contactPage(item)}><FontAwesomeIcon icon={faEye} className="hover:text-red-300"></FontAwesomeIcon></button>
-                        <button className='button'><FontAwesomeIcon icon={faPen} className="hover:text-black-300"></FontAwesomeIcon></button>
-                        <button className='button'><FontAwesomeIcon icon={faTrash} className="hover:text-black-300"></FontAwesomeIcon></button>
+                        <Link to={'/update-contact/' + item._id}><button className='button'><FontAwesomeIcon icon={faPen} className="hover:text-black-300">edit</FontAwesomeIcon></button></Link>
+                        <button className='button'><FontAwesomeIcon icon={faTrash} className="hover:text-black-300"  onClick={() => removeContact(item)}></FontAwesomeIcon></button>
                     </td>
                 </tr>
             )
@@ -77,41 +82,53 @@ export const ContactListNew = (props) => {
     }
 
     return (
-        <div className="list row">
-            <div className="col-md-10">
-                <div className="contact-table d-flex justify-content-start align-items-start">
+        <div className="d-flex justify-content-center">
+            <div className="list row">
+                <div className="col-md-9">
+                    <div className="contact-table">
 
-                   <h3 className="contact-add"> <Link to='/add-contact'><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon></Link></h3>
+                    <h3 className="contact-add"> <Link to='/add-contact'><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon></Link></h3>
 
-                    <table id='contact-list'>
-                        <thead>
-                            <tr>{renderHeader()}</tr>
-                        </thead>
-                        <tbody>
-                            {renderBody()}
-                        </tbody>
+                        <table id='contact-list'>
+                            <thead>
+                                <tr>{renderHeader()}</tr>
+                            </thead>
+                            <tbody>
+                                {renderBody()}
+                            </tbody>
 
-                    </table>
-                
+                        </table>
+                    
+                    </div>
+                    
                 </div>
-                
-            </div>
-            <div className="contact-detail col-md-2 mt-5">
-                    {detail ?(
-                    <Card style={{ width: '18rem',backgroundColor:"white" }}>
-                        <h2 className="text-black">Detail</h2>
-                        <hr className="text-black"></hr>
-                        <ListGroup>
-                            <ListGroup.Item>Phone:{detail.phone}</ListGroup.Item>
-                            <ListGroup.Item>Email:{detail.email}</ListGroup.Item>
-                            <ListGroup.Item>Name:{detail.name}</ListGroup.Item>
-                            <ListGroup.Item>Address:{detail.address}</ListGroup.Item>
-                        </ListGroup>
-                    </Card>):(
-                            <div></div>
-                    )}
-            </div>
-        
+                <div className="col-md-3">
+                {detail ?(
+                    <div className="contact-detail">
+                                <h1 className="text-black">Detail
+                                { detail.isFavourite ? 
+                    <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon>:<p></p>
+                    }</h1> 
+                                
+                                <hr></hr>
+                                <p>
+                                { detail.profile ? ( <img src={detail.profile} alt="firebase-image" height={"100px"} width={"100px"} />):<p></p>}
+                                </p>
+                                <p>Phone{detail.phone.map((element,index) => {
+                                    return (
+                                    <span key={element._id} className="ml-4 pl-5">
+                                        { element.home ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;Home: {element.home}</p>:<p></p>}
+                                        { element.work ?<p>&nbsp;&nbsp;&nbsp;work: {element.work}</p>:<p></p>}
+                                        { element.mobile ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;mobile: {element.mobile}</p>:<p></p>}
+                                    </span>
+                                    )
+                                })}</p>
+                                <p>Email:{detail.email}</p>
+                                <p>Name:{detail.name}</p>
+                                <p>Address:{detail.address}</p>
+                    </div>):( <div></div>)}
+                </div>
+        </div>
         </div>
 
 

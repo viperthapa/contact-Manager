@@ -6,7 +6,6 @@ require('dotenv').config()
 
 //check if email already exists
 exports.isValid = async function(email){
-    console.log("email",email)
     try{
         return await User.findOne({ email:email });
     }
