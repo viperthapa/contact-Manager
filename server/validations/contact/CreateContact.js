@@ -18,15 +18,23 @@ function validateCreateContact(contact){
             "string.min":
             "length must be at least {{#limit}} characters long",
         }),
-        phone:Joi.number().min(5).required().messages({
-            "string.empty":"This field is required",
+        phone: Joi.array().items(Joi.object({
+                home: Joi.string().min(7).max(10).pattern(/^\d+$/),
+                mobile: Joi.string().min(7).max(10).pattern(/^\d+$/),
+                work: Joi.string().min(7).max(10).pattern(/^\d+$/),
+            }).min(1)
+            )
+            .required()
+            .messages({
+            "string.empty":"the field is required",
+            "object.min": "At least 1 Phone number needs to be present",
+            "string.pattern.base": "only allows numeric i.e. 0-9",
             "string.max":
-            "length must be less than or equal to {{#limit}} characters long",
-            "string.min":
-            "length must be at least {{#limit}} characters long",
-        }),
+                "length must be less than or equal to {{#limit}} characters long",
+            "string.min": "length must be at least {{#limit}} characters long",
+            }),
         isFavourite: Joi.boolean(),
-        // image: Joi.string().messages({"string.empty":"the field is required"}),
+        profile: Joi.string().required().messages({"string.empty":"the field is required"}),
         address: Joi.string()
         .allow(null, '')
             .max(100)

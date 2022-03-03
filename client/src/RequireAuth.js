@@ -14,7 +14,6 @@ export default function requireAuth(Component) {
 
 		checkAuth() {
 			const user = JSON.parse(localStorage.getItem("user_data"));
-			console.log("user",user)
 			if (!user) {
 				return this.props.history.push('/login');
 			} 

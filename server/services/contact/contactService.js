@@ -8,7 +8,6 @@ var mongoose = require('mongoose');
  * @returns {Promise}
 */
 exports.list = async function(user){
-    console.log("user",user)
     try{
         const contactList = await Contact.find({userid:user}
             ).sort({ isFavourite:-1 , name: 1});
@@ -40,11 +39,12 @@ exports.create = async function(data){
     // validate
     const newContact = new Contact(data);
     try {
-        console.log("succesfuly created")
+        
       return await newContact.save();
+      
     } catch (error) {
         console.log("error",error)
-        res.status(409).json({ message: error.message });
+        throw error
     }
 }
 

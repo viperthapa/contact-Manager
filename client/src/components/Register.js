@@ -4,6 +4,7 @@ import Input from 'react-validation/build/input';
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { register } from '../services/auth-service'
+import { ShowToastr } from "../common/Toastr";
 
 
 //validation for mandatory fields
@@ -59,9 +60,9 @@ const Register = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             register(name,email, password).then(
                 (response) => {
+                    ShowToastr("Register successful!")
                     props.history.push("/login")
-                    setMessage(response.data.message);
-                    setSuccessful(true);
+                   
                 },
                 (error) => {
                     const resMessage =

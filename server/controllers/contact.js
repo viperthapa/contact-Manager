@@ -57,11 +57,10 @@ exports.create = async function (req, res, next) {
     try{
 
         const checkValidate = validateCreateContact(req.body)
-        if (Object.keys(checkValidate).length!==0){
-            res.status(400).send({ status: 400, error:checkValidate  })}
+        // if (Object.keys(checkValidate).length!==0){
+        //     res.status(400).send({ status: 400, error:checkValidate  })}
         req.body.userid = req.user.id
         const contactCreate = await ContactService.create(req.body)
-        console.log("contact create**",contactCreate)
         return res.status(201).json({ data: contactCreate });
 
     } catch(err){
@@ -78,14 +77,13 @@ exports.create = async function (req, res, next) {
 */
 exports.update = async function (req, res, next) {
     const checkValidate = validateUpdateContact(req.body)
-    if (Object.keys(checkValidate).length!==0){
-        res.status(400).send({ status: 400, error:checkValidate  })}
+    // if (Object.keys(checkValidate).length!==0){
+    //     res.status(400).send({ status: 400, error:checkValidate  })}
     const contact = await ContactService.update(req.params.id, req.body)
     return res.status(200).send({ status: 200, data: contact, message: "contact updated Successfully" });
 }
 
 exports.delete = async function(req,res,next){
-    console.log("enter unto delet",req.params.id)
     const contact = await ContactService.destroy(req.params.id);
     return res.status(200).send({ status: 200,message: "contact deleted Successfully" });
 }

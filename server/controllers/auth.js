@@ -22,12 +22,11 @@ exports.register = async function (req, res) {
     //check if the email already exist in db
     const checkEmail = await userServices.isValid(req.body.email)
     if (checkEmail) {
-        res.status(409).send("User with this email already exist!")
+        res.status(409).send({"message":"User with this email already exist!"})
     }
 
     try {
         const createUser = await userServices.create(req.body)
-        console.log("user created successfully",createUser)
         res.status(201).json(createUser);
     } catch (err) {
         console.log(err);
@@ -50,13 +49,11 @@ exports.login  = async function(req,res) {
     if (!user){
         return res.status(404).send({ message: "User Not found!" });
     }  
-    console.log("logged in user",user.password)
     //check if the provided password same as a db password
     var passwordIsValid =await bcrypt.compareSync(
         req.body.password,
         user.password
     );
-    console.log("passwordIsValid",passwordIsValid)
 
     if (!passwordIsValid) {
         return res.status(401).send({ message: "Invalid Password!" });
@@ -64,26 +61,24 @@ exports.login  = async function(req,res) {
     const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN)
 
-    console.log("user",user)
     res.status(200).send({
         id: user._id,
         full_name:user.name,
         username: user.username,
         email: user.email,
         access_token: access_token,
-        refreshToken:refreshToken
+        refresh_token:refreshToken
     });
 
 };
 
 exports.token = async function(req,res){
+    console.log("token",req.body.token)
     const refreshToken = req.body.token
-    console.log("refreshToken",refreshToken)
     //check if token is null
     if (refreshToken == null) return res.sendStatus(401).send({ message: "Invalid token!" });
     //find user
     const user =  await User.findOne({ refresh_token:refreshToken });
-    console.log("user",user)
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
         if (err) return res.sendStatus(403)

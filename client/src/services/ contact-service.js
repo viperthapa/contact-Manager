@@ -1,9 +1,10 @@
-import axios from 'axios';
-import authHeader from "./auth-header";
+import axios from 'axios'
+import { authHeader } from "./auth-header";
 const API_URL = "http://localhost:5000/api/"
 
 //get all contact list
 export const getContacts = () => {
+    console.log("auth header",authHeader)
     const res = axios.get(API_URL + "contacts/", { headers: authHeader() });
     return res;
 }
@@ -15,15 +16,14 @@ export const getContactObj = (id) => {
 }
 
 //create contact
-export const create = async (name, phone, email, address, isFavourite) => {
-    console.log("data*******",name, phone, email, address, isFavourite)
+export const create = async (name, phone, email, address, isFavourite, profile) => {
     try {
         const res = await axios.post(API_URL + "contacts/", {
-            name, phone, email, address, isFavourite
+            name, phone, email, address, isFavourite,profile
         }, { headers: authHeader() })
         return res
     } catch (error) {
-        console.log(error)
+        console.log("error",error)
     }
 
 };
@@ -37,4 +37,8 @@ export const update = async (id, data) => {
 //delete contact
 export const remove = (id) => {
     return axios.delete(API_URL + "contacts/" + id, { headers: authHeader() });
+};
+
+export const getToken = async (token) => {
+    return await axios.post(API_URL + "token/",token, { headers: "*"});
 };
