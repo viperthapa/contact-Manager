@@ -40,15 +40,14 @@ export const AddContact = (props) => {
     }
     const [contact, setContact] = useState(intialContactState);
     const [profile, setProfile] = useState({});
-    const [err, setErr] = useState({});
-    const [message, setMessage] = useState("");
+    const [error, setError] = useState({});
 
 
     const uploadImage = () => {
       if (!profile) {
-        setErr({
-          ...err,
-          profile: "Couldnot upload it",
+        setError({
+          ...error,
+          profile: "Couldnot upload images",
         });
         return;
       };
@@ -59,8 +58,8 @@ export const AddContact = (props) => {
         "state_changed",
         (snapshot) => {},
         (error) => {
-          setErr({
-            ...err,
+          setError({
+            ...error,
             profile: error,
           });
         },
@@ -96,15 +95,14 @@ export const AddContact = (props) => {
                 window.location.reload(true);
 
             })
-            .catch(error => {
-                console.log("error", error);
+            .catch(err => {
                 const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();
-                    setMessage(resMessage);
+                        (err.response &&
+                          err.response.data &&
+                          err.response.data.err) ||
+                          err.message ||
+                          err.toString();
+                setError(resMessage);
 
             });
     }
@@ -117,15 +115,8 @@ export const AddContact = (props) => {
          
         </header>
         <form className="contact-form">
-        {message && (
-                        <div className="form-group">
-                            <div className="alert alert-danger" role="alert">
-                                {message}
-                            </div>
-                        </div>
-                    )}
           <div className="contact-form-group">
-            <label className="contact-label" for="name">Name</label>
+            <label className="contact-label" for="name">Name<span className="text-dark">*</span></label>
             <input
               type="text"
               name="name"
@@ -136,9 +127,11 @@ export const AddContact = (props) => {
               onChange={handleInputChange}
               validations={[required]}
             />
+            <div className="text-danger mt-1 ps-2">{error.name}</div>
+
           </div>
           <div className="form-group">
-            <label className="contact-label"  for="email">Email</label>
+            <label className="contact-label"  for="email">Email<span className="text-dark">*</span></label>
             <input
               type="email"
               name="email"
@@ -150,11 +143,13 @@ export const AddContact = (props) => {
               required
             />
           </div>
+          <div className="text-danger mt-1 ps-2">{error.email}</div>
+
           <div className="form-group">
             <label className="contact-label pt-3 ps-1" for="email">Contact</label>
 
             <div className="col-md-4 ps-3">
-              <h5 className="contact-label">Home</h5>
+              <h5 className="contact-label">Home<span className="text-dark">*</span></h5>
               <input
                 type="text"
                 name="phone"
@@ -169,8 +164,10 @@ export const AddContact = (props) => {
                 }
               />
             </div>
+            <div className="text-danger mt-1 ps-2">{error.home}</div>
+
             <div className="col-md-4 ps-3 pt-3">
-              <h5 className="contact-label">Work</h5>
+              <h5 className="contact-label">Work<span className="text-dark">*</span></h5>
               <input
                 type="text"
                 name="phone"
@@ -184,9 +181,11 @@ export const AddContact = (props) => {
                   })
                 }
               />
+              <div className="text-danger mt-1 ps-2">{error.work}</div>
+
             </div>
             <div className="col-md-4 ps-3 pt-3">
-              <h5 className="contact-label">Phone</h5>
+              <h5 className="contact-label">Phone<span className="text-dark">*</span></h5>
               <input
                 type="text"
                 name="phone"
@@ -200,6 +199,8 @@ export const AddContact = (props) => {
                   })
                 }
               />
+              <div className="text-danger mt-1 ps-2">{error.mobile}</div>
+
             </div>
           </div>
           <div className="form-group">
@@ -214,9 +215,11 @@ export const AddContact = (props) => {
               onChange={handleInputChange}
               required
             />
+              <div className="text-danger mt-1 ps-2">{error.address}</div>
+
           </div>
           <div className="form-group">
-            <label className="contact-label">Image</label>
+            <label className="contact-label">Image<span className="text-dark">*</span></label>
             <input
               type="file"
               name="profile"
@@ -224,7 +227,9 @@ export const AddContact = (props) => {
               className="form-control"
               onChange={setImageDetail}
             />
+
             <button type="button" className="btn btn-secondary" onClick={uploadImage} >Upload</button>
+              <div className="text-danger mt-1 ps-2">{error.work}</div>
 
           </div>
           <div className="form-group">

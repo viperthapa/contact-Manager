@@ -19,6 +19,9 @@ exports.register = async function (req, res) {
 
     //validation using joi 
     const validatedData = validateRegisterUser(req.body);
+    if (Object.keys(validatedData).length!==0)
+    return res.status(400).send({ status: 400, err: validatedData });
+
     //check if the email already exist in db
     const checkEmail = await userServices.isValid(req.body.email)
     if (checkEmail) {
@@ -43,6 +46,9 @@ exports.register = async function (req, res) {
 exports.login  = async function(req,res) {
     //validation using joi 
     const validatedData = validateLoginUser(req.body);
+    if (Object.keys(validatedData).length!==0)
+    return res.status(400).send({ status: 400, err: validatedData });
+
 
     //check if the user is already in db 
     const user = await userServices.isValid(req.body.email)
@@ -58,7 +64,7 @@ exports.login  = async function(req,res) {
     if (!passwordIsValid) {
         return res.status(401).send({ message: "Invalid Password!" });
     }
-    const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
+    const access_token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
     const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN)
 
     res.status(200).send({
@@ -82,7 +88,7 @@ exports.token = async function(req,res){
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
         if (err) return res.sendStatus(403)
-        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
+        const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '50s' });
         res.json({ accessToken: accessToken })
       })
 }

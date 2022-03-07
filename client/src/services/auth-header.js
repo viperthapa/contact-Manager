@@ -11,7 +11,6 @@ export const authHeader = () => {
 
 //set token
 export const setToken = (tokenObj) => {
-    console.log("token obj",tokenObj)
     localStorage.setItem('access_token', tokenObj.access_token);
     localStorage.setItem('refresh_token', tokenObj.refresh_token);
 
