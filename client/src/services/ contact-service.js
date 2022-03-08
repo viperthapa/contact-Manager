@@ -27,9 +27,7 @@ export const create = async (name, phone, email, address, isFavourite, profile) 
 
 //update contact
 export const update = async (id, data) => {
-        console.log("data",data)
-        const res = await axios.put(API_URL + "contacts/" + id, data);
-        console.log("res in api",res)
+        const res = await axiosInstance.put("contacts/" + id, data);
         return res
 };
 

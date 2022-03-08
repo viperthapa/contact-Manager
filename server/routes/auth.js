@@ -6,7 +6,7 @@ var users = require('../controllers/auth')
 //register
 router.post('/register', users.register);
 router.post('/login', users.login);
-router.post('/token', users.token);
+router.post('/refreshtoken', users.refreshToken);
 
 
 

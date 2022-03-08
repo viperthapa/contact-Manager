@@ -1,49 +1,79 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 import dayjs from 'dayjs';
-import { async } from "@firebase/util";
+import { clearToken } from "./auth-header";
 
 const baseURL = "http://localhost:5000/api/"
 
 let authTokens = localStorage.getItem('user_data') ? JSON.parse(localStorage.getItem('user_data')) : null
-console.log("auth tokens",authTokens)
 
 const axiosInstance = axios.create({
     baseURL,
-    // headers:{Authorization: `Bearer ${authTokens?.access_token}`}
-});
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-
-
-axiosInstance.interceptors.request.use(async req => {
-
-    if(!authTokens){
-        console.log("not auth tokens")
-        return req
+/** 
+ * handling all requests for contact
+*/
+axiosInstance.interceptors.request.use(
+    (req) => {
+      const authTokens = localStorage.getItem('user_data') ?  JSON.parse(localStorage.getItem('user_data')) : null
+      if (authTokens) {
+        // for Node.js Express back-end
+        req.headers.Authorization = 'Bearer ' + authTokens.access_token
+      }
+      return req;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    authTokens = await localStorage.getItem('user_data') ?  JSON.parse(await localStorage.getItem('user_data')) : null
-    req.headers.Authorization = 'Bearer ' + authTokens.access_token
-    //decode the jwt and check if the token is expired or not
-    const user = jwt_decode(authTokens.access_token)
-    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1; 
-    if (isExpired){
-        const res = await axios.post(baseURL+'token/',{
-            token:authTokens.refresh_token
-        })
-        if (res.status == 200){
-            const newToken = JSON.parse(localStorage.getItem("user_data"));
-            console.log("new token",newToken)
-            req.headers.Authorization = 'Bearer ' + res.data.accessToken
+  );
 
-            let user = JSON.parse(localStorage.getItem("user_data"));
-            user.accessToken = res.data.accessToken;
-            localStorage.setItem("user_data", JSON.stringify(user));
+/** 
+ * handling response for contact modal crud operations
+*/
+const responseSuccessHandler = response => {
+    let user = JSON.parse(localStorage.getItem("user_data"));
+    user.access_token = response.data.accessToken;
+    localStorage.setItem("user_data", JSON.stringify(user));
+    response.headers.Authorization = 'Bearer ' +  user.accessToken
+    return response;
+};
 
-        }
-    }
+const responseErrorHandler = error => {
+    if (error.response.status === 401) {
+        clearToken();
+        window.location = '/login'
+}
+
+return Promise.reject(error);
+}
+
+
+axiosInstance.interceptors.response.use(
+    (res) => {
+        return res;
+    },
+    async (err) => {
+        //decode the jwt and check if the token is expired or not
+        const user = jwt_decode(authTokens.access_token)
+        const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1; 
+        if (isExpired || err.response.status === 403) {
+            try {
+                const authTokens = await localStorage.getItem('user_data') ?  JSON.parse(await localStorage.getItem('user_data')) : null
     
-    return req
-
-})
-
+                const response = await axios.post(baseURL+'refreshtoken/',{
+                                refresh_token:authTokens.refresh_token
+                            })
+                if (response.status === 200){
+                    responseSuccessHandler(response)
+                }    
+                
+            }catch (error) {
+                responseErrorHandler(error)
+            }
+        }}    
+)
 export default axiosInstance;

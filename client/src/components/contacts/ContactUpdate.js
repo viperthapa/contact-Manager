@@ -90,7 +90,8 @@ export const UpdateContact = (props) => {
     };
 
 
-    const saveContact = () => {
+    const saveContact = (e) => {
+        e.preventDefault();
         const data = {
             name: contact.name,
             phone: contact.phone,
@@ -101,10 +102,9 @@ export const UpdateContact = (props) => {
         };
         dispatch(updateContact(contact._id, data))
             .then(response => {
-              console.log("response*************",response)
+              props.history.push("/");
             })
             .catch(err => {
-              console.log("err^^^^^^",err)
               const resMessage =
               (err.response &&
                 err.response.data &&

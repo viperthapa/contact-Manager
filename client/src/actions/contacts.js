@@ -22,15 +22,12 @@ export const createContact = (name, phone, email, address, isFavourite,profile) 
 
 //update contacts
 export const updateContact = (id, data) => async (dispatch) => {
-    console.log("data",data)
     try{
     const res = await update(id, data);
-    console.log("res",res)
     dispatch({
         type: UPDATE_CONTACTS,
         payload: res.data
     });
-    console.log("res",res)
     return res
     } catch(err){
         console.log("err",err)
