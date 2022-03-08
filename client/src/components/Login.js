@@ -7,7 +7,7 @@ import { ShowToastr } from "../common/Toastr";
 const required = (value) => {
     if (!value) {
         return (
-            <div className="alert alert-danger" role="alert">
+            <div className="text-warning">
                 This field is required!
             </div>
         );
@@ -73,7 +73,7 @@ const Login = (props) => {
                         </div>
                     )}
                     <div className="form-group">
-                        <label htmlFor="username">Email</label>
+                        <label htmlFor="username">Email<span className="text-danger">*</span></label>
                         <Input
                             type="text"
                             className="form-control"
@@ -84,7 +84,7 @@ const Login = (props) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Password<span className="text-danger">*</span></label>
                         <Input
                             type="password"
                             className="form-control"

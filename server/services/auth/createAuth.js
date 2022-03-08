@@ -6,8 +6,12 @@ require('dotenv').config()
 
 //check if email already exists
 exports.isValid = async function(email){
+    console.log("email",email)
+
     try{
-        return await User.findOne({ email:email });
+        const user =  await User.findOne({ email:email });
+        console.log("user",user)
+        return user
     }
     catch(error){
         throw new Error("User is not valid")
@@ -24,19 +28,19 @@ exports.create = async function(data){
             email:data.email,
             password:encryptedPassword
         })
-        // Create token
-        const token = jwt.sign(
-            { user_id: newUser._id, email:newUser.email,name:newUser.name },
-            process.env.ACCESS_TOKEN,
-            {
-                expiresIn: "1h",
-            }
-        );
-        const refreshToken = jwt.sign({ user_id: newUser._id }, process.env.REFRESH_TOKEN)
+        // // Create token
+        // const token = jwt.sign(
+        //     { user_id: newUser._id, email:newUser.email,name:newUser.name },
+        //     process.env.ACCESS_TOKEN,
+        //     {
+        //         expiresIn: "1h",
+        //     }
+        // );
+        // const refreshToken = jwt.sign({ user_id: newUser._id }, process.env.REFRESH_TOKEN)
 
-        // save user token
-        newUser.token = token;
-        newUser.refresh_token = refreshToken;
+        // // save user token
+        // newUser.token = token;
+        // newUser.refresh_token = refreshToken;
         newUser.save()
         return newUser;
 

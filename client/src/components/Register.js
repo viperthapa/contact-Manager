@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
 import { register } from '../services/auth-service'
 import { ShowToastr } from "../common/Toastr";
 
@@ -11,22 +10,12 @@ import { ShowToastr } from "../common/Toastr";
 const required = (value) => {
     if (!value) {
         return (
-            <div className="alert alert-danger" role="alert">
+            <div className="text-warning">
                 This field is required!
             </div>
         )
     }
 }
-
-const validEmail = (value) => {
-    if (!isEmail(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
 
 
 const Register = (props) => {
@@ -90,7 +79,7 @@ const Register = (props) => {
                     {!successful && (
                         <div>
                             <div className="form-group">
-                                <label htmlFor="email">Name</label>
+                                <label htmlFor="name">Name<span className="text-danger">*</span></label>
                                 <Input
                                     type="text"
                                     className="form-control"
@@ -101,18 +90,28 @@ const Register = (props) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="email">Email<span className="text-danger">*</span></label>
                                 <Input
                                     type="text"
                                     className="form-control"
                                     name="email"
                                     value={email}
                                     onChange={onChangeEmail}
-                                    validations={[required, validEmail]}
+                                    validations={[required]}
                                 />
+                                {message && (
+                                    <div className="form-group">
+                                        <div
+                                            className={successful ? "alert alert-success" : "text-warning"}
+                                            role="alert"
+                                        >
+                                            {message}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="password">Password</label>
+                                <label htmlFor="password">Password<span className="text-danger">*</span></label>
                                 <Input
                                     type="password"
                                     className="form-control"
@@ -127,16 +126,7 @@ const Register = (props) => {
                             </div>
                         </div>
                     )}
-                    {message && (
-                        <div className="form-group">
-                            <div
-                                className={successful ? "alert alert-success" : "alert alert-danger"}
-                                role="alert"
-                            >
-                                {message}
-                            </div>
-                        </div>
-                    )}
+                    
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>

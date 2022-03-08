@@ -4,6 +4,7 @@ import { updateContact } from "../../actions/contacts";
 import { getContactObj } from "../../services/ contact-service";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { Formik } from 'formik';
 
 export const UpdateContact = (props) => {
     const intialContactState = {
@@ -25,19 +26,22 @@ export const UpdateContact = (props) => {
 
     const [contact, setContact] = useState(intialContactState);
     const [profile, setProfile] = useState({});
-    const dispatch = useDispatch();
-    const [err, setErr] = useState({});
 
-    console.log("contact******************88",contact)
+    
+
+    const dispatch = useDispatch();
+    const [error, setError] = useState({});
+
     //for handling images
     const uploadImage = () => {
       if (!profile) {
-        setErr({
-          ...err,
-          profile: "Couldnot upload it",
+        setError({
+          ...error,
+          profile: "Couldnot upload images",
         });
         return;
       };
+      console.log("profile.name",profile)
       const storageRef = ref(storage, `images/${profile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, profile);
   
@@ -45,13 +49,14 @@ export const UpdateContact = (props) => {
         "state_changed",
         (snapshot) => {},
         (error) => {
-          setErr({
-            ...err,
+          setError({
+            ...error,
             profile: error,
           });
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("download url",downloadURL)
             setContact({ ...contact, profile : downloadURL });
           });
         }
@@ -85,7 +90,8 @@ export const UpdateContact = (props) => {
     };
 
 
-    const saveContact = () => {
+    const saveContact = (e) => {
+        e.preventDefault();
         const data = {
             name: contact.name,
             phone: contact.phone,
@@ -96,12 +102,20 @@ export const UpdateContact = (props) => {
         };
         dispatch(updateContact(contact._id, data))
             .then(response => {
-                props.history.push("/");
+              props.history.push("/");
             })
-            .catch(e => {
-                console.log(e);
+            .catch(err => {
+              const resMessage =
+              (err.response &&
+                err.response.data &&
+                err.response.data.err) ||
+                err.message ||
+                err.toString();
+             setError(resMessage);
             });
     };
+
+    console.log("error",error)
 
     return (
         <div>
@@ -112,7 +126,7 @@ export const UpdateContact = (props) => {
           </header>
           <form className="contact-form">
             <div className="contact-form-group">
-              <label className="contact-label" for="name">Name</label>
+              <label className="contact-label" for="name">Name<span className="text-dark">*</span></label>
               <input
                 type="text"
                 name="name"
@@ -124,8 +138,10 @@ export const UpdateContact = (props) => {
                 required
               />
             </div>
+            <div className="text-danger mt-1 ps-2">{error.name}</div>
+
             <div className="form-group">
-              <label className="contact-label"  for="email">Email</label>
+              <label className="contact-label"  for="email">Email<span className="text-dark">*</span></label>
               <input
                 type="email"
                 name="email"
@@ -140,12 +156,11 @@ export const UpdateContact = (props) => {
             <div className="form-group">
               <h5 className="row contact-label ps-3 pt-3">Contact</h5>
               <div className="col-md-4 ps-3 pt-3">
-                <h5 className="contact-label">Home</h5>
+                <h5 className="contact-label">Home<span className="text-dark">*</span></h5>
                 <input
                   type="text" 
-                  value={contact.phone[0]}
                   className="form-control"
-                  placeholder="e.g:0154214212"
+                  value={contact.phone[0]?.home}
                   onChange={(event) =>
                     setContact({
                       ...contact,
@@ -155,11 +170,11 @@ export const UpdateContact = (props) => {
                 />
               </div>
               <div className="col-md-4 ps-3 pt-3">
-                <h5 className="contact-label">Work</h5>
+                <h5 className="contact-label">Work<span className="text-dark">*</span></h5>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="e.g:9854354145"
+                  value={contact.phone[0]?.work}
                   onChange={(event) =>
                     setContact({
                       ...contact,
@@ -169,11 +184,11 @@ export const UpdateContact = (props) => {
                 />
               </div>
               <div className="col-md-4 ps-3 pt-3">
-                <h5 className="contact-label">Phone</h5>
+                <h5 className="contact-label">Phone<span className="text-dark">*</span></h5>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="e.g:0154214212"
+                  value={contact.phone[0]?.mobile}
                   onChange={(event) =>
                     setContact({
                       ...contact,
@@ -197,14 +212,18 @@ export const UpdateContact = (props) => {
               />
             </div>
             <div className="form-group">
-              <label className="contact-label">Image</label>
+              <label className="contact-label">Image<span className="text-dark">*</span></label>
+              { contact.profile ? ( <img src={contact.profile} alt="firebase-image" height={"80px"} width={"80px"} />):<p></p>}<br></br>
+
               <input
                 type="file"
                 name="profile"
                 id="profile"
                 className="form-control"
+                onChange={setImageDetail}
+
               />
-              <button type="button" className="btn btn-secondary" onClick={uploadImage} >Upload</button>
+              <button type="button" className="btn btn-secondary" onClick={uploadImage} >Update</button>
             </div>
             <div class="form-group">
               <label className="contact-label"  for="email">Favourite</label>
