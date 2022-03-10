@@ -6,11 +6,6 @@ import { combineReducers } from "redux";
 import { Provider } from 'react-redux';
 import store from './store/store';
 import contacts from './reducers/contacts';
-import axios from "axios";
-import { setToken,getRefreshToken,authHeader,clearToken } from './services/auth-header'
-import {getToken} from "./services/ contact-service"
-//check for every response 
-//Add a response interceptor
 
 
 ReactDOM.render(

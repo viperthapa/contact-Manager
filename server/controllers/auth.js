@@ -86,22 +86,6 @@ exports.login  = async function(req,res) {
 
 };
 
-// exports.token = async function(req,res){
-//     console.log("token",req.body.token)
-//     const refreshToken = req.body.token
-//     //check if token is null
-//     if (refreshToken == null) return res.sendStatus(401).send({ message: "Refresh Token is required!" });
-//     //find user
-//     const user =  await User.findOne({ refresh_token:refreshToken });
-
-//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
-//         if (err) return res.sendStatus(403)
-//         const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
-//         const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESH_TOKEN)
-
-//         res.json({ accessToken: accessToken,refreshToken:refreshToken })
-//       })
-// }
 /** user login
 *
 * @param {RefreshToken}  req
@@ -149,4 +133,22 @@ exports.refreshToken = async (req,res) => {
     }
 
 
+}
+
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns
+*/
+exports.all = async function (req, res) {
+    console.log("req")
+    try {
+        const user = await userServices.list();
+        res.status(200).json(user)
+    } catch (error) {
+        return res.status(400).json({ status: 400, message: error.message });
+    }
 }

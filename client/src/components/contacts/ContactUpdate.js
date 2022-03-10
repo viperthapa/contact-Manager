@@ -4,7 +4,9 @@ import { updateContact } from "../../actions/contacts";
 import { getContactObj } from "../../services/ contact-service";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { Formik } from 'formik';
+import { ShowToastr } from "../../common/Toastr";
+import { form } from "react-validation/build/form";
+
 
 export const UpdateContact = (props) => {
     const intialContactState = {
@@ -26,11 +28,11 @@ export const UpdateContact = (props) => {
 
     const [contact, setContact] = useState(intialContactState);
     const [profile, setProfile] = useState({});
-
+    const [error, setError] = useState({});
+    const [isSubmit, setIsSubmit] = useState(false);
     
 
     const dispatch = useDispatch();
-    const [error, setError] = useState({});
 
     //for handling images
     const uploadImage = () => {
@@ -91,31 +93,66 @@ export const UpdateContact = (props) => {
 
 
     const saveContact = (e) => {
+        console.log("enetered")
         e.preventDefault();
-        const data = {
-            name: contact.name,
-            phone: contact.phone,
-            email: contact.email,
-            address: contact.address,
-            isFavourite: contact.isFavourite,
-            profile:contact.profile
-        };
-        dispatch(updateContact(contact._id, data))
-            .then(response => {
-              props.history.push("/");
-            })
-            .catch(err => {
-              const resMessage =
-              (err.response &&
-                err.response.data &&
-                err.response.data.err) ||
-                err.message ||
-                err.toString();
-             setError(resMessage);
-            });
-    };
+        console.log("contact",contact)
+        setError(validate(contact));
+        setIsSubmit(true);
+        console.log("eror",Object.keys(error).length)
+        if (Object.keys(error).length === 0 && isSubmit) {
+          const data = {
+              name: contact.name,
+              phone: contact.phone,
+              email: contact.email,
+              address: contact.address,
+              isFavourite: contact.isFavourite,
+              profile:contact.profile
+          };
+          dispatch(updateContact(contact._id, data))
+              .then(response => {
+                ShowToastr("Contact has been successfully Updated!")
+                props.history.push("/");
 
-    console.log("error",error)
+              })
+              .catch(err => {
+                const resMessage =
+                (err.response &&
+                  err.response.data &&
+                  err.response.data.err) ||
+                  err.message ||
+                  err.toString();
+              setError(resMessage);
+              });
+      };
+    }
+
+    const validate = (values) => {
+      const errors = {};
+      if (!values.name) {
+        errors.name = "Name is required!";
+      }
+      if (!values.email) {
+        errors.email = "Email is required!";
+      } 
+      if (!values.phone[0]['home']) {
+        errors.home = "Home contact is required!";
+      } 
+      if (!values.phone[0]['work']) {
+        errors.work = "Work contact is required!";
+      }  else if (values.phone[0]['work'].length > 10) {
+        errors.work = "Phone cannot exceed more than 10 characters";
+      }
+      if (!values.phone[0]['mobile']) {
+        errors.mobile = "Mobile contact is required!";
+      } else if (values.phone[0]['mobile'].length > 10) {
+        errors.mobile = "Phone cannot exceed more than 10 characters";
+      }
+      if (!values.profile) {
+        errors.image = "Image is required!";
+      } 
+      return errors;
+    }
+
 
     return (
         <div>
@@ -153,6 +190,7 @@ export const UpdateContact = (props) => {
                 required
               />
             </div>
+            <div className="text-danger mt-1 ps-2">{error.email}</div>
             <div className="form-group">
               <h5 className="row contact-label ps-3 pt-3">Contact</h5>
               <div className="col-md-4 ps-3 pt-3">
@@ -169,6 +207,8 @@ export const UpdateContact = (props) => {
                   }
                 />
               </div>
+              <div className="text-danger mt-1 ps-3">{error.home}</div>
+
               <div className="col-md-4 ps-3 pt-3">
                 <h5 className="contact-label">Work<span className="text-dark">*</span></h5>
                 <input
@@ -183,6 +223,8 @@ export const UpdateContact = (props) => {
                   }
                 />
               </div>
+              <div className="text-danger mt-1 ps-2">{error.work}</div>
+
               <div className="col-md-4 ps-3 pt-3">
                 <h5 className="contact-label">Phone<span className="text-dark">*</span></h5>
                 <input
@@ -196,6 +238,8 @@ export const UpdateContact = (props) => {
                     })
                   }
                 />
+              <div className="text-danger mt-1 ps-2">{error.mobile}</div>
+
             </div>
             </div>
             <div className="form-group">
@@ -223,6 +267,8 @@ export const UpdateContact = (props) => {
                 onChange={setImageDetail}
 
               />
+              <div className="text-danger mt-1 ps-2">{error.image}</div>
+
               <button type="button" className="btn btn-secondary" onClick={uploadImage} >Update</button>
             </div>
             <div class="form-group">
@@ -230,9 +276,16 @@ export const UpdateContact = (props) => {
               <input type="checkbox" name="isFavourite" value={contact.isFavourite} checked={contact.isFavourite} onChange={handleInputChange}/>
             </div>
             <div className="form-group">
-              <button onClick={saveContact}  type="submit" id="submit" className="submit-button">
+              {contact.profile?(
+              <button onClick={saveContact} type="submit" id="submit" className="submit-button">
+                Submit
+              </button>)
+              :
+            (
+              <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled="true">
                 Submit
               </button>
+            )}
             </div>
           </form>
         </div>

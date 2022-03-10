@@ -21,7 +21,7 @@ export const getContactObj =async(id) => {
 export const create = async (name, phone, email, address, isFavourite, profile) => {
         const res = await axiosInstance.post("contacts/", {
             name, phone, email, address, isFavourite,profile
-        }, { headers: authHeader() })
+        })
         return res
 };
 

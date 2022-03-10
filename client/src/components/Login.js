@@ -4,6 +4,8 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { login } from '../services/auth-service'
 import { ShowToastr } from "../common/Toastr";
+
+
 const required = (value) => {
     if (!value) {
         return (
@@ -39,7 +41,6 @@ const Login = (props) => {
                 () => {
                     ShowToastr("Login successful!")
                     props.history.push("/");
-                    window.location.reload(true);
                 },
                 (error) => {
                     const resMessage =
