@@ -2,12 +2,17 @@ const mongoose = require("mongoose");
 
 //Define a schema for User
 const contactSchema = new mongoose.Schema({
-    user_id:{type:Object,required:true},
+    userid:{type:Object},
     name: { type: String, maxLength: 50,required:true,trim: true },
-    phone: { type: String, required: true, maxlength: 15, unique: true,trim: true },
-    email: { type: String, unique: true, required: true,trim: true },
+    // phone: {  type: Array, validate: (v) => Array.isArray(v) && Array.length >= 0,
+    // },
+    phone: {
+        type: Array,
+        validate: (value) => Array.isArray(value) && Array.length >= 0,
+      },
+    email: { type: String, required: true,trim: true },
     address: { type: String, maxLength: 50,trim: true },
-    image: { data: Buffer, contentType: String },
+    profile: { type: String,required: true,minlength: 5,trim: true, },
     isFavourite: { type: Boolean, default: false,trim: true },
     created_at:{type:Date},
     updated_at:{type:Date}

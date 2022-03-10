@@ -11,28 +11,27 @@ import {
 import { create, getContacts, update, remove } from "../services/ contact-service";
 
 //create 
-export const createContact = (name, phone, email, address, isFavourite) => async (dispatch) => {
-    try {
-        const res = await create(name, phone, email, address, isFavourite);
+export const createContact = (name, phone, email, address, isFavourite,profile) => async (dispatch) => {
+        const res = await create(name, phone, email, address, isFavourite,profile);
         dispatch({
             type: CREATE_CONTACTS,
             payload: res.data
         });
-    } catch (err) {
-        return Promise.reject(err)
-    }
+        return res
 }
 
 //update contacts
 export const updateContact = (id, data) => async (dispatch) => {
-    try {
-        const res = await update(id, data);
-        dispatch({
-            type: UPDATE_CONTACTS,
-            payload: res.data
-        });
-    } catch (err) {
-        return Promise.reject(err)
+    try{
+    const res = await update(id, data);
+    dispatch({
+        type: UPDATE_CONTACTS,
+        payload: res.data
+    });
+    return res
+    } catch(err){
+        console.log("err",err)
+        return err
     }
 }
 

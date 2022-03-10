@@ -1,38 +1,41 @@
-import axios from 'axios';
-import authHeader from "./auth-header";
-const API_URL = "http://localhost:5000/"
+import { authHeader } from "./auth-header";
+import axios from "axios";
+import axiosInstance from './axiosInstance'
+
+const API_URL = "http://localhost:5000/api/"
 
 //get all contact list
-export const getContacts = () => {
-    return axios.get(API_URL + "api/contacts/", { headers: authHeader() });
+
+export const getContacts = async() => {
+    const res = await axiosInstance.get("contacts/");
+    return res;
 }
 
 //detail page of contact
-export const getContactObj = (id) => {
-    const res = axios.get(API_URL + "api/contacts/" + id, { headers: authHeader() })
+export const getContactObj =async(id) => {
+    const res = await axiosInstance.get("contacts/" + id)
     return res
 }
 
 //create contact
-export const create = async (name, phone, email, address, isFavourite) => {
-    try {
-        const res = await axios.post(API_URL + "api/contacts/", {
-            name, phone, email, address, isFavourite
-        }, { headers: authHeader() })
+export const create = async (name, phone, email, address, isFavourite, profile) => {
+        const res = await axiosInstance.post("contacts/", {
+            name, phone, email, address, isFavourite,profile
+        })
         return res
-    } catch (error) {
-        console.log(error)
-    }
-
 };
-
 
 //update contact
 export const update = async (id, data) => {
-    return await axios.put(API_URL + "api/contacts/" + id, data, { headers: authHeader() });
+        const res = await axiosInstance.put("contacts/" + id, data);
+        return res
 };
 
 //delete contact
-export const remove = (id) => {
-    return axios.delete(API_URL + "api/contacts/" + id, { headers: authHeader() });
+export const remove = async (id) => {
+    return await axiosInstance.delete("contacts/" + id, { headers: authHeader() });
+};
+
+export const getToken = async (token) => {
+    return await axios.post(API_URL + "token/",token, { headers: "*"});
 };

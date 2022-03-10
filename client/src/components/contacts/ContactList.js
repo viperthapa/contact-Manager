@@ -55,7 +55,7 @@ export const ContactList = (props) => {
                         {isLogin &&
                             contacts.retreieve_data.map((item, index) => (
 
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <li className="list-group-item d-flex justify-content-between align-items-center">
                                     {item.name}({item.phone})
                                     <div className="w-20">
                                         <button className="btn btn-primary mr-2" onClick={() => contactPage(item)}>view</button>

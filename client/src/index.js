@@ -5,7 +5,7 @@ import App from './App';
 import { combineReducers } from "redux";
 import { Provider } from 'react-redux';
 import store from './store/store';
-import contacts from './reducers/contacts'
+import contacts from './reducers/contacts';
 
 
 ReactDOM.render(

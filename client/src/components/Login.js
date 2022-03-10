@@ -3,11 +3,13 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { login } from '../services/auth-service'
+import { ShowToastr } from "../common/Toastr";
+
 
 const required = (value) => {
     if (!value) {
         return (
-            <div className="alert alert-danger" role="alert">
+            <div className="text-warning">
                 This field is required!
             </div>
         );
@@ -37,8 +39,8 @@ const Login = (props) => {
         if (checkBtn.current.context._errors.length === 0) {
             login(email, password).then(
                 () => {
+                    ShowToastr("Login successful!")
                     props.history.push("/");
-                    window.location.reload();
                 },
                 (error) => {
                     const resMessage =
@@ -64,8 +66,15 @@ const Login = (props) => {
                     className="profile-img-card"
                 />
                 <Form onSubmit={handleLogin} ref={form}>
+                {message && (
+                        <div className="form-group">
+                            <div className="alert alert-danger" role="alert">
+                                {message}
+                            </div>
+                        </div>
+                    )}
                     <div className="form-group">
-                        <label htmlFor="username">Email</label>
+                        <label htmlFor="username">Email<span className="text-danger">*</span></label>
                         <Input
                             type="text"
                             className="form-control"
@@ -76,7 +85,7 @@ const Login = (props) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Password<span className="text-danger">*</span></label>
                         <Input
                             type="password"
                             className="form-control"
@@ -86,7 +95,7 @@ const Login = (props) => {
                             validations={[required]}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mt-3">
                         <button className="btn btn-primary btn-block" disabled={loading}>
                             {loading && (
                                 <span className="spinner-border spinner-border-sm"></span>
@@ -94,13 +103,7 @@ const Login = (props) => {
                             <span>Login</span>
                         </button>
                     </div>
-                    {message && (
-                        <div className="form-group">
-                            <div className="alert alert-danger" role="alert">
-                                {message}
-                            </div>
-                        </div>
-                    )}
+                    
                     <CheckButton style={{ display: "none" }} ref={checkBtn} />
                 </Form>
             </div>

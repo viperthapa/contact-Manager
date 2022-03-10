@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "./services/auth-service";
 import "./App.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const Navbar = () => {
 
@@ -27,7 +28,7 @@ export const Navbar = () => {
             <div className="navbar-nav mr-auto">
                 <li className="nav-item">
                     <Link to={"/"} className="nav-link">
-                        <h3>Home</h3>
+                        <h3 className="navbar-element">Home</h3>
                     </Link>
                 </li>
 
@@ -36,12 +37,12 @@ export const Navbar = () => {
                 <div className="navbar-nav" style={{ marginLeft: "80rem" }}>
                     <li className="nav-item">
                         <div className="nav-link">
-                            <h4>Welcome:{currentUser.email}</h4>
+                            <h4 className="navbar-element">Welcome:{currentUser.full_name}</h4>
                         </div>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link">
-                            <button style={{ border: "None", backgroundColor: "black", color: "whitesmoke" }} onClick={() => logout()}><h5>Logout</h5></button>
+                            <button className="navbar-element" onClick={() => logout()}><a><h5>Logout</h5></a></button>
                         </a>
                     </li>
                 </div>
@@ -61,4 +62,5 @@ export const Navbar = () => {
             )}
         </nav>
     )
+
 }
