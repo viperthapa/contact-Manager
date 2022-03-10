@@ -28,19 +28,6 @@ exports.create = async function(data){
             email:data.email,
             password:encryptedPassword
         })
-        // // Create token
-        // const token = jwt.sign(
-        //     { user_id: newUser._id, email:newUser.email,name:newUser.name },
-        //     process.env.ACCESS_TOKEN,
-        //     {
-        //         expiresIn: "1h",
-        //     }
-        // );
-        // const refreshToken = jwt.sign({ user_id: newUser._id }, process.env.REFRESH_TOKEN)
-
-        // // save user token
-        // newUser.token = token;
-        // newUser.refresh_token = refreshToken;
         newUser.save()
         return newUser;
 
@@ -50,3 +37,16 @@ exports.create = async function(data){
     }
 }
 
+
+/**
+ * Find all users.
+ *
+ * @returns {Promise}
+*/
+exports.list = async function(user){
+    try{
+        return await User.find();
+    }catch(error){
+        throw new Error('No data available');
+    }
+}

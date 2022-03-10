@@ -59,7 +59,7 @@ exports.create = async function (req, res, next) {
         //validation 
         const validatedData = validateCreateContact(req.body);
         if (Object.keys(validatedData).length!==0)
-        return res.status(400).send({ status: 400, err: validatedData });
+            return res.status(400).send({"message":validatedData});
 
         req.body.userid = req.user.id
         const contactCreate = await ContactService.create(req.body)

@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000;
 
 
 // server listening 
-app.listen(port, '0.0.0.0', () => {
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
 }); 
-
+module.exports = server;

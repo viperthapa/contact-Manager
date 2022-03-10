@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { createContact } from "../../actions/contacts";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import '../../style/custom.css'
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-// import { ShowToastr } from "../common/Toastr";
 import { ShowToastr } from "../../common/Toastr";
 
 
@@ -23,6 +19,7 @@ const required = (value) => {
 };
 
 export const AddContact = (props) => {
+
     const intialContactState = {
         name: "",
         phone: [ 
@@ -41,7 +38,7 @@ export const AddContact = (props) => {
     const [contact, setContact] = useState(intialContactState);
     const [profile, setProfile] = useState({});
     const [error, setError] = useState({});
-
+    const [isSubmit, setIsSubmit] = useState(false);
 
     const uploadImage = () => {
       if (!profile) {
@@ -84,29 +81,57 @@ export const AddContact = (props) => {
     }
     const saveContact = async (e) => {
         e.preventDefault();
+        setError(validate(contact));
+        setIsSubmit(true);
         const { name, phone, email, address, isFavourite, profile } = contact;
+        if (Object.keys(error).length === 0 && isSubmit) {
+          //handle image 
+          const  imageData = await uploadImage();
+          dispatch(createContact(name, phone, email, address, isFavourite, profile))
+              .then(data => {
+                  ShowToastr("Contact has been successfully saved!")
+                  props.history.push("/");
 
-        //handle image 
-        const  imageData = await uploadImage();
-        dispatch(createContact(name, phone, email, address, isFavourite, profile))
-            .then(data => {
-                ShowToastr("Contact has been successfully saved!")
-                props.history.push("/");
-                window.location.reload(true);
+              })
+              .catch(err => {
+                  const resMessage =
+                          (err.response &&
+                            err.response.data &&
+                            err.response.data.err) ||
+                            err.message ||
+                            err.toString();
+                  setError(resMessage);
 
-            })
-            .catch(err => {
-                const resMessage =
-                        (err.response &&
-                          err.response.data &&
-                          err.response.data.err) ||
-                          err.message ||
-                          err.toString();
-                setError(resMessage);
+              });
+          }
 
-            });
     }
-
+    const validate = (values) => {
+      const errors = {};
+      if (!values.name) {
+        errors.name = "Name is required!";
+      }
+      if (!values.email) {
+        errors.email = "Email is required!";
+      } 
+      if (!values.phone[0]['home']) {
+        errors.home = "Home contact is required!";
+      } 
+      if (!values.phone[0]['work']) {
+        errors.work = "Work contact is required!";
+      }  else if (values.phone[0]['work'].length > 10) {
+        errors.work = "Phone cannot exceed more than 10 characters";
+      }
+      if (!values.phone[0]['mobile']) {
+        errors.mobile = "Mobile contact is required!";
+      } else if (values.phone[0]['mobile'].length > 10) {
+        errors.mobile = "Phone cannot exceed more than 10 characters";
+      }
+      if (!values.profile) {
+        errors.image = "Image is required!";
+      } 
+      return errors;
+    }
     return (
     <div>
         <div className="container">
@@ -124,10 +149,8 @@ export const AddContact = (props) => {
               className="form-control"
               placeholder="Enter your name"
               value={contact.name}
-              onChange={handleInputChange}
-              validations={[required]}
-            />
-            <div className="text-danger mt-1 ps-2">{error.name}</div>
+              onChange={handleInputChange}/>
+            <div className="text-danger">{error.name}</div>
 
           </div>
           <div className="form-group">
@@ -140,7 +163,6 @@ export const AddContact = (props) => {
               placeholder="Enter your Email"
               value={contact.email}
               onChange={handleInputChange}
-              required
             />
           </div>
           <div className="text-danger mt-1 ps-2">{error.email}</div>
@@ -164,7 +186,7 @@ export const AddContact = (props) => {
                 }
               />
             </div>
-            <div className="text-danger mt-1 ps-2">{error.home}</div>
+            <div className="text-danger mt-1 ps-3">{error.home}</div>
 
             <div className="col-md-4 ps-3 pt-3">
               <h5 className="contact-label">Work<span className="text-dark">*</span></h5>
@@ -215,7 +237,6 @@ export const AddContact = (props) => {
               onChange={handleInputChange}
               required
             />
-              <div className="text-danger mt-1 ps-2">{error.address}</div>
 
           </div>
           <div className="form-group">
@@ -229,7 +250,7 @@ export const AddContact = (props) => {
             />
 
             <button type="button" className="btn btn-secondary" onClick={uploadImage} >Upload</button>
-              <div className="text-danger mt-1 ps-2">{error.work}</div>
+              <div className="text-danger mt-1 ps-2">{error.image}</div>
 
           </div>
           <div className="form-group">
@@ -238,9 +259,17 @@ export const AddContact = (props) => {
               value={contact.isFavourite} onChange={handleInputChange}/>
           </div>
           <div className="form-group">
-            <button onClick={saveContact}  type="submit" id="submit" className="submit-button">
-              Submit
-            </button>
+            {contact.profile?(
+              <button onClick={saveContact} type="submit" id="submit" className="submit-button">
+                Submit
+              </button>)
+              :
+            (
+              <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled="true">
+                Submit
+              </button>
+            )}
+
           </div>
         </form>
         </div>
