@@ -19,9 +19,7 @@ export const setToken = (tokenObj) => {
 
 //get refresh token
 export const getRefreshToken = (tokenObj) => {
-    const user = JSON.parse(localStorage.getItem("user_data"));
-    console.log("user in refresh",user)
-    
+    const user = JSON.parse(localStorage.getItem("user_data"));    
     return user.refresh_token;
 
 }

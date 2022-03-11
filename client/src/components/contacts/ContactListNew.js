@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { applyMiddleware } from "redux";
 import { Link } from "react-router-dom";
 import '../../../src/App.css'
 import { deleteContacts, retrieveContacts } from "../../actions/contacts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen,faEye, faTrash,faHeart,faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2'
 
 
 export const ContactListNew = (props) => {
@@ -29,17 +29,33 @@ export const ContactListNew = (props) => {
 
     }
     const removeContact = (value) => {
-        dispatch(deleteContacts(value._id))
-            .then(() => {
-                props.history.push("/");
-                window.location.reload(true);
-
-
-            })
-            .catch(e => {
-                console.log(e);
-            });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You want to delete this contact',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33', 
+            confirmButtonText: 'Yes!'
+         }).then((result) => {
+            if(result.isConfirmed){
+                dispatch(deleteContacts(value._id))
+                .then(() => {
+                    props.history.push("/");
+                    window.location.reload(true);
+    
+    
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+           }
+         })            
+        
     };
+
+    //delete contact 
+
 
     //render header
     const renderHeader = () => {
@@ -58,7 +74,7 @@ export const ContactListNew = (props) => {
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     {/* <td>{item.phone}</td> */}
-                    <td className="table-phone">{item.phone.map((element,index) => {
+                    <td className="table-phone">{item.phone && item.phone.map((element,index) => {
                         return (
                           <span key={element._id}>
                           <p>Home: {element.home}</p>
@@ -86,9 +102,7 @@ export const ContactListNew = (props) => {
             <div className="list row">
                 <div className="col-md-9">
                     <div className="contact-table">
-
-                    <h3 className="contact-add"> <Link to='/add-contact'><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon></Link></h3>
-
+                        <h3 className="contact-add"> <Link to='/add-contact'><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon></Link></h3>
                         <table id='contact-list'>
                             <thead>
                                 <tr>{renderHeader()}</tr>
@@ -112,7 +126,7 @@ export const ContactListNew = (props) => {
                                 
                                 <hr></hr>
                                 <p>
-                                { detail.profile ? ( <img src={detail.profile} alt="firebase-image" height={"100px"} width={"100px"} />):<p></p>}
+                                { detail.profile ? ( <img src={detail.profile} alt="" height={"100px"} width={"100px"} />):<p></p>}
                                 </p>
                                 <p>Phone{detail.phone.map((element,index) => {
                                     return (

@@ -41,6 +41,8 @@ const Login = (props) => {
                 () => {
                     ShowToastr("Login successful!")
                     props.history.push("/");
+                    window.location.reload(true); 
+
                 },
                 (error) => {
                     const resMessage =
