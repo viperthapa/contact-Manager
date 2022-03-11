@@ -8,16 +8,6 @@ import { ShowToastr } from "../../common/Toastr";
 
 
 
-const required = (value) => {
-  if (!value) {
-      return (
-          <div className="alert alert-danger" role="alert">
-              This field is required!
-          </div>
-      );
-  }
-};
-
 export const AddContact = (props) => {
 
     const intialContactState = {
@@ -83,14 +73,19 @@ export const AddContact = (props) => {
         e.preventDefault();
         setError(validate(contact));
         setIsSubmit(true);
-        const { name, phone, email, address, isFavourite, profile } = contact;
+    }
+
+    useEffect(() => {
         if (Object.keys(error).length === 0 && isSubmit) {
           //handle image 
-          const  imageData = await uploadImage();
+          const { name, phone, email, address, isFavourite, profile } = contact;
+          const imageData =  uploadImage();
+          console.log("image",profile)
           dispatch(createContact(name, phone, email, address, isFavourite, profile))
               .then(data => {
                   ShowToastr("Contact has been successfully saved!")
                   props.history.push("/");
+                  // window.location.reload(true); 
 
               })
               .catch(err => {
@@ -103,9 +98,11 @@ export const AddContact = (props) => {
                   setError(resMessage);
 
               });
-          }
+      }
 
-    }
+    }, [error]);
+
+
     const validate = (values) => {
       const errors = {};
       if (!values.name) {
@@ -116,7 +113,9 @@ export const AddContact = (props) => {
       } 
       if (!values.phone[0]['home']) {
         errors.home = "Home contact is required!";
-      } 
+      } else if (values.phone[0]['home'].length > 10) {
+        errors.home = "Phone cannot exceed more than 10 characters";
+      }
       if (!values.phone[0]['work']) {
         errors.work = "Work contact is required!";
       }  else if (values.phone[0]['work'].length > 10) {
@@ -132,6 +131,8 @@ export const AddContact = (props) => {
       } 
       return errors;
     }
+
+
     return (
     <div>
         <div className="container">
@@ -265,7 +266,7 @@ export const AddContact = (props) => {
               </button>)
               :
             (
-              <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled="true">
+              <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled={true}>
                 Submit
               </button>
             )}

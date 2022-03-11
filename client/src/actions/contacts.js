@@ -30,7 +30,6 @@ export const updateContact = (id, data) => async (dispatch) => {
     });
     return res
     } catch(err){
-        console.log("err",err)
         return err
     }
 }

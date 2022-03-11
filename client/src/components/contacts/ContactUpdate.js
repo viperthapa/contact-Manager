@@ -5,7 +5,6 @@ import { getContactObj } from "../../services/ contact-service";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ShowToastr } from "../../common/Toastr";
-import { form } from "react-validation/build/form";
 
 
 export const UpdateContact = (props) => {
@@ -18,7 +17,6 @@ export const UpdateContact = (props) => {
             mobile: "",
           },
         ],
-        phone: "",
         email: "",
         address: "",
         profile:"",
@@ -43,7 +41,6 @@ export const UpdateContact = (props) => {
         });
         return;
       };
-      console.log("profile.name",profile)
       const storageRef = ref(storage, `images/${profile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, profile);
   
@@ -58,7 +55,6 @@ export const UpdateContact = (props) => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("download url",downloadURL)
             setContact({ ...contact, profile : downloadURL });
           });
         }
@@ -93,13 +89,15 @@ export const UpdateContact = (props) => {
 
 
     const saveContact = (e) => {
-        console.log("enetered")
         e.preventDefault();
-        console.log("contact",contact)
         setError(validate(contact));
         setIsSubmit(true);
-        console.log("eror",Object.keys(error).length)
-        if (Object.keys(error).length === 0 && isSubmit) {
+          
+    }
+
+    useEffect(() => {
+      console.log(error);
+      if (Object.keys(error).length === 0 && isSubmit) {
           const data = {
               name: contact.name,
               phone: contact.phone,
@@ -123,8 +121,8 @@ export const UpdateContact = (props) => {
                   err.toString();
               setError(resMessage);
               });
-      };
-    }
+      }
+    }, [error]);
 
     const validate = (values) => {
       const errors = {};
