@@ -79,10 +79,8 @@ exports.create = async function (req, res, next) {
 */
 exports.update = async function (req, res, next) {
     const checkValidate = validateUpdateContact(req.body)
-    console.log("checkValidate",checkValidate)
     if (Object.keys(checkValidate).length!==0)
         return res.status(400).send({ status: 400, err: checkValidate });
-    console.log("update body",req.body)
     const contact = await ContactService.update(req.params.id, req.body)
     return res.status(200).send({ status: 200, data: contact, message: "contact updated Successfully" });
 }

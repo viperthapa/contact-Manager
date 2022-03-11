@@ -98,13 +98,10 @@ exports.refreshToken = async (req,res) => {
     if (requestToken == null){
         return res.status(403).json({ message: "Refresh Token is required!" });
     }
-    console.log("refr",requestToken)
 
     try{
         //get the refresh token
-        console.log("refresh token1",requestToken)
         let refreshToken = await RefreshToken.findOne({ token: requestToken });
-        console.log("refresh token",refreshToken)
 
         if (!refreshToken){
             return res.status(401).json({ message: "Token not in db!" });
@@ -144,7 +141,6 @@ exports.refreshToken = async (req,res) => {
  * @returns
 */
 exports.all = async function (req, res) {
-    console.log("req")
     try {
         const user = await userServices.list();
         res.status(200).json(user)

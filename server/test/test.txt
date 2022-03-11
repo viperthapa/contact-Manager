@@ -1,0 +1,9 @@
+describe(): This is used to associate multiple tests in one collection.
+
+it(): This is used in a single test unit to mention how the test should behave and a callback to execute the test body.
+
+chai.request(): This is used to make an HTTP Request to the REST API
+
+done(): This is used to mention that the test was successful.
+
+xx.should.xxx(): The function should help to assert the test condition that is make test assertions. If the condition fails, the test fails.
