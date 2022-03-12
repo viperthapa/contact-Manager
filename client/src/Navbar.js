@@ -3,11 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { getCurrentUser } from "./services/auth-service";
 import "./App.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const Navbar = () => {
 
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [open, setOpen] = useState(false);
+
+
     useEffect(() => {
         const user = getCurrentUser();
         if (user) {
@@ -21,46 +23,40 @@ export const Navbar = () => {
         window.location.href = "/login";
 
     }
-
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <div>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div className="container-fluid  text-default">
+                    <a className="navbar-brand text-default" href="#"><Link to={"/"} className="nav-link"><h3 className="navbar-element">Home</h3></Link></a>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 float-left">
 
-            <div className="navbar-nav mr-auto">
-                <li className="nav-item">
-                    <Link to={"/"} className="nav-link">
-                        <h3 className="navbar-element">Home</h3>
-                    </Link>
-                </li>
+                    </ul>
+                    {currentUser ? (
 
-            </div>
-            {currentUser ? (
-                <div className="navbar-nav" style={{ marginLeft: "80rem" }}>
-                    <li className="nav-item">
-                        <div className="nav-link">
-                            <h4 className="navbar-element">Welcome:{currentUser.full_name}</h4>
-                        </div>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link">
-                            <button className="navbar-element" onClick={() => logout()}><a><h5>Logout</h5></a></button>
-                        </a>
-                    </li>
+
+                        <span className="d-flex">
+                            <a class="navbar-brand nav-link nav-item active" aria-current="page" href="#">welcome:{currentUser.full_name}</a>
+                            <a class="navbar-brand nav-link nav-item active" aria-current="page" href="#" onClick={() => logout()}>logout</a>
+                        </span>
+                        ) : (
+                        <span className="d-flex">
+                            <Link to={"/login"} className="nav-link">
+                                    <h4 className="navbar-brand nav-link nav-item active">Login</h4>
+                            </Link>
+                            <Link to={"/register"} className="nav-link">
+                                <h4 className="navbar-brand nav-link nav-item active">Register</h4>
+                            </Link>
+                        </span>
+                            )}
+                        
+                    </div>
                 </div>
-            ) : (
-                <div className="navbar-nav" style={{ marginLeft: "100rem" }}>
-                    <li className="nav-item">
-                        <Link to={"/login"} className="nav-link">
-                            <h4>Login</h4>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to={"/register"} className="nav-link">
-                            <h4>Sign Up</h4>
-                        </Link>
-                    </li>
-                </div>
-            )}
-        </nav>
+                </nav>
+        </div>
     )
 
 }
