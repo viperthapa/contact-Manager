@@ -14,6 +14,7 @@ export const ContactListNew = (props) => {
     const [isLogin, setIsLogin] = useState(false);
     const [detail, setDetail] = useState(null);
 
+
     const checkLogin = () => {
         const getToken = JSON.parse(localStorage.getItem("user_data"));
         setIsLogin(getToken ? true : false)
@@ -54,20 +55,21 @@ export const ContactListNew = (props) => {
         
     };
 
-    //delete contact 
 
 
     //render header
     const renderHeader = () => {
         let headerElement = ["Sn","name","email","phone","Favourite","Action"]
 
+        
         return headerElement.map((key, index) => {
             return <th key={index}>{key.toUpperCase()}</th>
         })
     }
     //render body
     const renderBody = () => {
-        return contacts.retreieve_data && contacts.retreieve_data.map((item,index) => {
+        
+        return  contacts.retreieve_data && contacts.retreieve_data.map((item,index) => {
             return (
                 <tr key={item._id}>
                     <td>{index+1}</td>
@@ -98,51 +100,53 @@ export const ContactListNew = (props) => {
     }
 
     return (
-        <div className="d-flex justify-content-center">
-            <div className="list row">
-                <div className="col-md-9">
-                    <div className="contact-table">
-                        <h3 className="contact-add"> <Link to='/add-contact'><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon></Link></h3>
-                        <table id='contact-list'>
-                            <thead>
-                                <tr>{renderHeader()}</tr>
-                            </thead>
-                            <tbody>
-                                {renderBody()}
-                            </tbody>
-
-                        </table>
-                    
+        <div className="d-flex flex-column mt-5">
+                    <div class="d-flex flex-column">
+                    <Link to='/add-contact'><h3 className="contact-add ml-5 ps-5" style={{marginLeft:"290px"}}> <button className="btn btn-success"><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add</button></h3></Link>
                     </div>
-                    
-                </div>
-                <div className="col-md-3">
-                {detail ?(
-                    <div className="contact-detail">
-                                <h1 className="text-black">Detail
-                                { detail.isFavourite ? 
-                    <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon>:<p></p>
-                    }</h1> 
-                                
-                                <hr></hr>
-                                <p>
-                                { detail.profile ? ( <img src={detail.profile} alt="" height={"100px"} width={"100px"} />):<p></p>}
-                                </p>
-                                <p>Phone{detail.phone.map((element,index) => {
-                                    return (
-                                    <span key={element._id} className="ml-4 pl-5">
-                                        { element.home ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;Home: {element.home}</p>:<p></p>}
-                                        { element.work ?<p>&nbsp;&nbsp;&nbsp;work: {element.work}</p>:<p></p>}
-                                        { element.mobile ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;mobile: {element.mobile}</p>:<p></p>}
-                                    </span>
-                                    )
-                                })}</p>
-                                <p>Email:{detail.email}</p>
-                                <p>Name:{detail.name}</p>
-                                <p>Address:{detail.address}</p>
-                    </div>):( <div></div>)}
-                </div>
-        </div>
+                    <div className="d-flex flex-row" >
+                        <div className="contact-table">
+                            <div class="d-flex flex-column" style={{width:"20%"}}>
+                                <table id='contact-list'>
+                                    <thead>
+                                        <tr>{renderHeader()}</tr>
+                                    </thead>
+                                    <tbody>
+                                        {renderBody()}
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        
+                        
+                        </div>
+                        
+                    <div className="" style={{width:"20%",marginLeft:"18em"}}>
+                    {detail ?(<div className="contact-detail">
+                                    <h1 className="text-black">Detail
+                                    { detail.isFavourite ?  <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon>:<p></p>}</h1> 
+                                    
+                                    <hr></hr>
+                                    <p>
+                                    { detail.profile ? ( <img src={detail.profile} alt="" height={"100px"} width={"100px"} />):<p></p>}
+                                    </p>
+                                    <p>Phone{detail.phone.map((element,index) => {
+                                        return (
+                                        <span key={element._id} className="ml-4 pl-5">
+                                            { element.home ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;Home: {element.home}</p>:<p></p>}
+                                            { element.work ?<p>&nbsp;&nbsp;&nbsp;work: {element.work}</p>:<p></p>}
+                                            { element.mobile ?<p className="ml-4 pl-5">&nbsp;&nbsp;&nbsp;mobile: {element.mobile}</p>:<p></p>}
+                                        </span>
+                                        )
+                                    })}</p>
+                                    <p>Email:{detail.email}</p>
+                                    <p>Name:{detail.name}</p>
+                                    <p>Address:{detail.address}</p>
+                        </div>):( <div></div>)}
+                    </div>
+
+
+                    </div>
         </div>
 
 

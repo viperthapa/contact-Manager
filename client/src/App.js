@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { BrowserRouter, Routes, Route, Switch, Link } from "react-router-dom";
 import Register from '../src/components/Register';
 import Login from '../src/components/Login';
-import { ContactList } from "./components/contacts/ContactList";
 import { ContactListNew } from "./components/contacts/ContactListNew";
 import { AddContact } from "./components/contacts/ContactAdd";
 import { UpdateContact } from "./components/contacts/ContactUpdate";

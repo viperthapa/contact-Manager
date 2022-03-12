@@ -5,7 +5,8 @@ import { getContactObj } from "../../services/ contact-service";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ShowToastr } from "../../common/Toastr";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 export const UpdateContact = (props) => {
     const intialContactState = {
@@ -153,13 +154,11 @@ export const UpdateContact = (props) => {
 
 
     return (
-        <div>
+        <div className="contactAdd">
         <div className="container">
-          <header className="header">
-            <h1 id="contact-title" className="text-center">Update contact</h1>
-          
-          </header>
           <form className="contact-form">
+            <h1 id="contact-title" className="text-center"><FontAwesomeIcon icon={faUserPlus} />Update Contact</h1>
+
             <div className="contact-form-group">
               <label className="contact-label" for="name">Name<span className="text-dark">*</span></label>
               <input

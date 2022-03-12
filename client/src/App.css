@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
+* {
+  font-family: "Fira Sans", sans-serif;
+  margin-top: 0px !important;
+}
+
 label {
   display: block;
   margin-top: 10px;
@@ -5,6 +11,7 @@ label {
 .card-container.card {
   max-width: 350px !important;
   padding: 40px 40px;
+  margin-top: 80px !important;
 }
 .card {
   background-color: #888383;
@@ -29,6 +36,11 @@ label {
 }
 
 /* navbar  */
+.navbar {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .navbar-element {
   border: "None";
   background-color: transparent;
@@ -110,3 +122,27 @@ label {
   width: 60%;
   padding: 40px;
 }
+
+/*media query navbar*/
+
+/*for mobile view*/
+
+/* .open .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .navbar-nav {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    height: calc(100vh - 50px);
+    width: 100%;
+  }
+
+  .navbar-nav navbar-element {
+    margin-bottom: 10px;
+  } */

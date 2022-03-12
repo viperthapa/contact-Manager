@@ -5,6 +5,9 @@ import '../../style/custom.css'
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ShowToastr } from "../../common/Toastr";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -134,145 +137,145 @@ export const AddContact = (props) => {
 
 
     return (
-    <div>
+    <div className="contactAdd">
         <div className="container">
-        <header className="header">
-          <h1 id="contact-title" className="text-center">Add contact</h1>
-         
-        </header>
-        <form className="contact-form">
-          <div className="contact-form-group">
-            <label className="contact-label" for="name">Name<span className="text-dark">*</span></label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              className="form-control"
-              placeholder="Enter your name"
-              value={contact.name}
-              onChange={handleInputChange}/>
-            <div className="text-danger">{error.name}</div>
+          <form className="contact-form">
 
-          </div>
-          <div className="form-group">
-            <label className="contact-label"  for="email">Email<span className="text-dark">*</span></label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              className="form-control"
-              placeholder="Enter your Email"
-              value={contact.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="text-danger mt-1 ps-2">{error.email}</div>
-
-          <div className="form-group">
-            <label className="contact-label pt-3 ps-1" for="email">Contact</label>
-
-            <div className="col-md-4 ps-3">
-              <h5 className="contact-label">Home<span className="text-dark">*</span></h5>
+            <h1 id="contact-title" className="text-center"><FontAwesomeIcon icon={faUserPlus} />Add contact</h1>
+            <div className="contact-form-group">
+              <label className="contact-label" for="name">Name<span className="text-dark">*</span></label>
               <input
                 type="text"
-                name="phone"
-                id="phone"
+                name="name"
+                id="name"
                 className="form-control"
-                placeholder="e.g:0154214212"
-                onChange={(event) =>
-                  setContact({
-                    ...contact,
-                    phone: [{ ...contact.phone[0], home: event.target.value }],
-                  })
-                }
+                placeholder="Enter your name"
+                value={contact.name}
+                onChange={handleInputChange}/>
+              <div className="text-danger">{error.name}</div>
+
+            </div>
+            <div className="form-group">
+              <label className="contact-label"  for="email">Email<span className="text-dark">*</span></label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                className="form-control"
+                placeholder="Enter your Email"
+                value={contact.email}
+                onChange={handleInputChange}
               />
             </div>
-            <div className="text-danger mt-1 ps-3">{error.home}</div>
+            <div className="text-danger mt-1 ps-2">{error.email}</div>
 
-            <div className="col-md-4 ps-3 pt-3">
-              <h5 className="contact-label">Work<span className="text-dark">*</span></h5>
+            <div className="form-group">
+              <label className="contact-label pt-3 ps-1" for="email">Contact</label>
+
+              <div className="col-md-4 ps-3">
+                <label className="contact-label">Home<span className="text-dark">*</span></label>
+
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  className="form-control"
+                  placeholder="e.g:0154214212"
+                  onChange={(event) =>
+                    setContact({
+                      ...contact,
+                      phone: [{ ...contact.phone[0], home: event.target.value }],
+                    })
+                  }
+                />
+              </div>
+              <div className="text-danger mt-1 ps-3">{error.home}</div>
+
+              <div className="col-md-4 ps-3 pt-3">
+                <label className="contact-label">Work<span className="text-dark">*</span></label>
+
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  className="form-control"
+                  placeholder="e.g:9854354145"
+                  onChange={(event) =>
+                    setContact({
+                      ...contact,
+                      phone: [{ ...contact.phone[0], work: event.target.value }],
+                    })
+                  }
+                />
+                <div className="text-danger mt-1 ps-2">{error.work}</div>
+
+              </div>
+              <div className="col-md-4 ps-3 pt-3">
+              <label className="contact-label">Phone<span className="text-dark">*</span></label>
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  className="form-control"
+                  placeholder="e.g:0154214212"
+                  onChange={(event) =>
+                    setContact({
+                      ...contact,
+                      phone: [{ ...contact.phone[0], mobile: event.target.value }],
+                    })
+                  }
+                />
+                <div className="text-danger mt-1 ps-2">{error.mobile}</div>
+
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="contact-label"  for="email">Address</label>
               <input
                 type="text"
-                name="phone"
-                id="phone"
+                name="address"
+                id="email"
                 className="form-control"
-                placeholder="e.g:9854354145"
-                onChange={(event) =>
-                  setContact({
-                    ...contact,
-                    phone: [{ ...contact.phone[0], work: event.target.value }],
-                  })
-                }
+                placeholder="Enter your address"
+                value={contact.address}
+                onChange={handleInputChange}
+                required
               />
-              <div className="text-danger mt-1 ps-2">{error.work}</div>
 
             </div>
-            <div className="col-md-4 ps-3 pt-3">
-              <h5 className="contact-label">Phone<span className="text-dark">*</span></h5>
+            <div className="form-group">
+              <label className="contact-label">Image<span className="text-dark">*</span></label>
               <input
-                type="text"
-                name="phone"
-                id="phone"
+                type="file"
+                name="profile"
+                id="profile"
                 className="form-control"
-                placeholder="e.g:0154214212"
-                onChange={(event) =>
-                  setContact({
-                    ...contact,
-                    phone: [{ ...contact.phone[0], mobile: event.target.value }],
-                  })
-                }
+                onChange={setImageDetail}
               />
-              <div className="text-danger mt-1 ps-2">{error.mobile}</div>
+
+              <button type="button" className="btn btn-secondary" onClick={uploadImage} >Upload</button>
+                <div className="text-danger mt-1 ps-2">{error.image}</div>
 
             </div>
-          </div>
-          <div className="form-group">
-            <label className="contact-label"  for="email">Address</label>
-            <input
-              type="text"
-              name="address"
-              id="email"
-              className="form-control"
-              placeholder="Enter your address"
-              value={contact.address}
-              onChange={handleInputChange}
-              required
-            />
+            <div className="form-group">
+              <label className="contact-label"  for="email">Favourite</label>
+              <input type="checkbox" name="isFavourite" 
+                value={contact.isFavourite} onChange={handleInputChange}/>
+            </div>
+            <div className="form-group">
+              {contact.profile?(
+                <button onClick={saveContact} type="submit" id="submit" className="submit-button">
+                  Submit
+                </button>)
+                :
+              (
+                <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled={true}>
+                  Submit
+                </button>
+              )}
 
-          </div>
-          <div className="form-group">
-            <label className="contact-label">Image<span className="text-dark">*</span></label>
-            <input
-              type="file"
-              name="profile"
-              id="profile"
-              className="form-control"
-              onChange={setImageDetail}
-            />
-
-            <button type="button" className="btn btn-secondary" onClick={uploadImage} >Upload</button>
-              <div className="text-danger mt-1 ps-2">{error.image}</div>
-
-          </div>
-          <div className="form-group">
-            <label className="contact-label"  for="email">Favourite</label>
-            <input type="checkbox" name="isFavourite" 
-              value={contact.isFavourite} onChange={handleInputChange}/>
-          </div>
-          <div className="form-group">
-            {contact.profile?(
-              <button onClick={saveContact} type="submit" id="submit" className="submit-button">
-                Submit
-              </button>)
-              :
-            (
-              <button onClick={saveContact} type="submit" id="submit" className="submit-button" disabled={true}>
-                Submit
-              </button>
-            )}
-
-          </div>
-        </form>
+            </div>
+          </form>
         </div>
     </div>
               
