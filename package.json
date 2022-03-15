@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "doc": "jsdoc -c jsdoc.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsdoc": "^3.6.10"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.1",
+    "nodemon": "^2.0.15",
+    "shx": "^0.3.4",
+    "sinon": "^13.0.1",
+    "supertest": "^6.2.2"
+  }
+}
