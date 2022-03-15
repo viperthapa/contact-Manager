@@ -1,20 +1,15 @@
-
-//reference code for model :https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
-const mongoose = require("mongoose");
-
-//Define a schema for User
+import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 40,
-      },
-    email: { type: String, unique: true,required:true },
-    password: { type: String },
-    created_at: { type: Date, default: Date.now },
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 40,
+  },
+  email: { type: String, unique: true, required: true },
+  password: { type: String },
+  created_at: { type: Date, default: Date.now },
+});
+const User = mongoose.model("User", userSchema);
 
-})
-
-//Export function to create "User" model class
-module.exports = mongoose.model("User", userSchema)
+export default User;

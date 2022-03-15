@@ -5,7 +5,7 @@ import '../../../src/App.css'
 import { deleteContacts, retrieveContacts } from "../../actions/contacts";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen,faEye, faTrash,faHeart,faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 
 export const ContactListNew = (props) => {
@@ -68,41 +68,52 @@ export const ContactListNew = (props) => {
     }
     //render body
     const renderBody = () => {
+
+        if (contacts.retreieve_data.length > 0){
         
-        return  contacts.retreieve_data && contacts.retreieve_data.map((item,index) => {
+            return  contacts.retreieve_data && contacts.retreieve_data.map((item,index) => {
+                return (
+                    <tr key={item._id}>
+                        <td>{index+1}</td>
+                        <td>{item.name}</td>
+                        <td>{item.email}</td>
+                        {/* <td>{item.phone}</td> */}
+                        <td className="table-phone">{item.phone && item.phone.map((element,index) => {
+                            return (
+                            <span key={element._id}>
+                            <p>Home: {element.home}</p>
+                            <p>Work: {element.work}</p>
+                            <p>Mobile: {element.mobile}</p>
+                            </span>
+                            )
+                        })}</td>
+                        { item.isFavourite ? 
+                        <td> <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon></td>:<td></td>
+                        }
+                        
+                        <td className='action'>
+                            <button className='button' onClick={() => contactPage(item)}><FontAwesomeIcon icon={faEye} className="hover:text-red-300"></FontAwesomeIcon></button>
+                            <Link to={'/update-contact/' + item._id}><button className='button'><FontAwesomeIcon icon={faPen} className="hover:text-black-300">edit</FontAwesomeIcon></button></Link>
+                            <button className='button'><FontAwesomeIcon icon={faTrash} className="hover:text-black-300"  onClick={() => removeContact(item)}></FontAwesomeIcon></button>
+                        </td>
+                    </tr>
+                )
+            })
+        }else{
             return (
-                <tr key={item._id}>
-                    <td>{index+1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    {/* <td>{item.phone}</td> */}
-                    <td className="table-phone">{item.phone && item.phone.map((element,index) => {
-                        return (
-                          <span key={element._id}>
-                          <p>Home: {element.home}</p>
-                          <p>Work: {element.work}</p>
-                          <p>Mobile: {element.mobile}</p>
-                        </span>
-                        )
-                    })}</td>
-                    { item.isFavourite ? 
-                    <td> <FontAwesomeIcon icon={faHeart} style={{ marginLeft:"30px"}}></FontAwesomeIcon></td>:<td></td>
-                    }
-                    
-                    <td className='action'>
-                        <button className='button' onClick={() => contactPage(item)}><FontAwesomeIcon icon={faEye} className="hover:text-red-300"></FontAwesomeIcon></button>
-                        <Link to={'/update-contact/' + item._id}><button className='button'><FontAwesomeIcon icon={faPen} className="hover:text-black-300">edit</FontAwesomeIcon></button></Link>
-                        <button className='button'><FontAwesomeIcon icon={faTrash} className="hover:text-black-300"  onClick={() => removeContact(item)}></FontAwesomeIcon></button>
-                    </td>
+                <tr>
+                    <td colSpan={6} className="text-danger text-center">No data available in table</td>
                 </tr>
             )
-        })
+        }
     }
 
     return (
         <div className="d-flex flex-column mt-5">
                     <div class="d-flex flex-column">
-                    <Link to='/add-contact'><h3 className="contact-add ml-5 ps-5" style={{marginLeft:"290px"}}> <button className="btn btn-success"><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add</button></h3></Link>
+                    {!!contacts.retreieve_data.length?(<Link to='/add-contact'><h3 className="contact-add ml-5 ps-5" style={{marginLeft:"290px"}}> <button className="btn btn-success"><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add</button></h3></Link>):(
+                        <Link to='/add-contact'><h3 className="contact-add ml-5 ps-5" style={{marginLeft:"180px"}}> <button className="btn btn-success"><FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add</button></h3></Link>
+                    )}
                     </div>
                     <div className="d-flex flex-row" >
                         <div className="contact-table">

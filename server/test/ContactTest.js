@@ -8,10 +8,8 @@ const config = require("../config/auth");
 let server = require('../index');
 
 // Import Model
-var Contact = require("../models/contact");
-var User = require("../models/user");
-
-console.log("token",config.secret)
+const Contact = require("../models/contact");
+const User = require("../models/user");
 
 // describe('Contact Api',function(){
 //     it("get contacts",function(done){

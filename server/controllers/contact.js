@@ -1,16 +1,7 @@
-/*
-find:display the particular data from db that it matches
-findId: used to find a single document by its _id field.
-update: used to update one document in the database without returning it.
-*/
-const Contact = require("../models/contact")
-const path = require('path');
-var mongoose = require('mongoose');
-const auth = require("../middleware/user");
-const ContactService = require("../services/contact/contactService");
-const validateCreateContact = require("../validations/contact/CreateContact");
-const validateUpdateContact = require("../validations/contact/UpdateContact");
-
+import "dotenv/config";
+import * as contactServices from "../services/contact/contactService";
+import validateCreateContact from "../validations/contact/CreateContact";
+import validateUpdateContact from "../validations/contact/UpdateContact";
 
 /**
  *
@@ -18,14 +9,14 @@ const validateUpdateContact = require("../validations/contact/UpdateContact");
  * @param {Response} res
  * @param {NextFunction} next
  * @returns
-*/
-exports.all = async function (req, res) {
-    try {
-        const contacts = await ContactService.list(req.user.id);
-        res.status(200).json(contacts)
-    } catch (error) {
-        return res.status(400).json({ status: 400, message: error.message });
-    }
+ */
+export async function all(req, res) {
+  try {
+    const contacts = await contactServices.list(req.user.id);
+    res.status(200).json(contacts);
+  } catch (error) {
+    return res.status(400).json({ status: 400, message: error.message });
+  }
 }
 
 /**
@@ -34,60 +25,58 @@ exports.all = async function (req, res) {
  * @param {Response} res
  * @param {NextFunction} next
  * @returns
-*/
-exports.show = async function (req, res, next) {
-    try {
-        const { id } = req.params
-        const contactDetail = await ContactService.detail(id);
-        res.status(200).json(contactDetail);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+ */
+export async function show(req, res) {
+  try {
+    const { id } = req.params;
+    const contactDetail = await contactServices.detail(id);
+    res.status(200).json(contactDetail);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 }
-
-
 
 /**
-* @param {Request} req
-* @param {Response} res
-* @param {NextFunction} next
-* @returns
-*/
-exports.create = async function (req, res, next) {
-    try{
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns
+ */
+export async function create(req, res) {
+  try {
+    const validatedData = validateCreateContact(req.body);
+    if (Object.keys(validatedData).length !== 0)
+      return res.status(400).send({ message: validatedData });
 
-        //validation 
-        const validatedData = validateCreateContact(req.body);
-        if (Object.keys(validatedData).length!==0)
-            return res.status(400).send({"message":validatedData});
-
-        req.body.userid = req.user.id
-        const contactCreate = await ContactService.create(req.body)
-        return res.status(201).json({ data: contactCreate });
-
-    } catch(err){
-        throw err
-    }
+    req.body.userid = req.user.id;
+    const contactCreate = await contactServices.create(req.body);
+    return res.status(201).json({ data: contactCreate });
+  } catch (err) {
+    throw err;
+  }
 }
-
 
 /**
-* @param {Request} req
-* @param {Response} res
-* @param {NextFunction} next
-* @returns
-*/
-exports.update = async function (req, res, next) {
-    const checkValidate = validateUpdateContact(req.body)
-    if (Object.keys(checkValidate).length!==0)
-        return res.status(400).send({ status: 400, err: checkValidate });
-    const contact = await ContactService.update(req.params.id, req.body)
-    return res.status(200).send({ status: 200, data: contact, message: "contact updated Successfully" });
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @returns
+ */
+export async function update(req, res) {
+  const checkValidate = validateUpdateContact(req.body);
+  if (Object.keys(checkValidate).length !== 0)
+    return res.status(400).send({ status: 400, err: checkValidate });
+  const contact = await contactServices.update(req.params.id, req.body);
+  return res.status(200).send({
+    status: 200,
+    data: contact,
+    message: "contact updated Successfully",
+  });
 }
 
-exports.delete = async function(req,res,next){
-    const contact = await ContactService.destroy(req.params.id);
-    return res.status(200).send({ status: 200,message: "contact deleted Successfully" });
+export async function remove(req, res) {
+  const contact = await contactServices.destroy(req.params.id);
+  return res
+    .status(200)
+    .send({ status: 200, message: "contact deleted Successfully" });
 }
-
-
