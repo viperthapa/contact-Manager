@@ -1,17 +1,10 @@
-var express = require('express');
-var router = express.Router();
+import express from "express";
+import * as users from "../controllers/auth";
+const router = express.Router();
 
-var users = require('../controllers/auth')
+router.post("/register", users.register);
+router.get("/user", users.all);
+router.post("/login", users.login);
+router.post("/refreshtoken", users.refreshToken);
 
-//register
-router.post('/register', users.register);
-router.get('/user', users.all);
-router.post('/login', users.login);
-router.post('/refreshtoken', users.refreshToken);
-
-
-
-
-module.exports = router;
-
-
+export default router;

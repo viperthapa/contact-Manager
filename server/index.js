@@ -1,23 +1,20 @@
-require("dotenv").config(); //module that loads environment variables from a .env file into process.env
-require("./config/database").connect();
-const express = require("express");
-const cors = require('cors');
+import "dotenv/config";
+import connect from "./config/database";
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import router from "./routes/router.js";
+connect();
 
-// routes
-const routes = require("./routes")
-const bodyParser = require('body-parser');
 const app = express();
 app.use(express.json());
-app.use(cors())
-
+app.use(cors());
 app.use(bodyParser.json());
+app.use("/api", router);
 
-app.use('/api',routes);
 const port = process.env.PORT || 5000;
 
-
-// server listening 
-const server = app.listen(port, '0.0.0.0', () => {
-    console.log(`Server running on port ${port}`);
-}); 
-module.exports = server;
+// server listening
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on port ${port}`);
+});

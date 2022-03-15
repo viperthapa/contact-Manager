@@ -97,7 +97,6 @@ export const UpdateContact = (props) => {
     }
 
     useEffect(() => {
-      console.log(error);
       if (Object.keys(error).length === 0 && isSubmit) {
           const data = {
               name: contact.name,

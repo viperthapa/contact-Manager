@@ -1,71 +1,80 @@
-const Contact = require("../../models/contact")
-var mongoose = require('mongoose');
-
+import Contact from "../../models/contact";
+import mongoose from "mongoose";
 
 /**
- * Find all contacts.
- *
- * @returns {Promise}
-*/
-exports.list = async function(user){
-    try{
-        const contactList = await Contact.find({userid:user}
-            ).sort({ isFavourite:-1 , name: 1});
-        return contactList
-    }catch(error){
-        throw new Error('No data available');
-    }
+ * Find all contacts
+ * @function list
+ * @param {*}  req
+ * @param {*} res
+ * @return
+ */
+export async function list(user) {
+  try {
+    const contactList = await Contact.find({ userid: user }).sort({
+      isFavourite: -1,
+      name: 1,
+    });
+    return contactList;
+  } catch (error) {
+    throw new Error("No data available");
+  }
 }
 
 /**
- * Find single detail contact.
- *
- * @returns {Promise}
-*/
-exports.detail = async function(contactId){
-    try{
-        return await Contact.findById(contactId);
-    }catch(error){
-        throw new Error('No data available');
-    }
+ * find detail of contact
+ * @function detail
+ * @param {*}  req
+ * @param {*} res
+ * @return
+ */
+export async function detail(contactId) {
+  try {
+    return await Contact.findById(contactId);
+  } catch (error) {
+    throw new Error("No data available");
+  }
 }
 
 /**
- * Store an contact of auth user.
- *
- * @returns {Promise}
-*/
-exports.create = async function(data){
-    // validate
-    const newContact = new Contact(data);
-    try {
-        
-      return await newContact.save();
-      
-    } catch (error) {
-        console.log("error",error)
-        throw error
-    }
+ * create a contact
+ * @function create
+ * @param {*}  req
+ * @param {*} res
+ * @return
+ */
+export async function create(data) {
+  const newContact = new Contact(data);
+  try {
+    return await newContact.save();
+  } catch (error) {
+    throw error;
+  }
 }
 
 /**
- * update an contact of auth user.
- *
- * @returns {Promise}
-*/
-exports.update = async function(id,data){
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-    const result = await Contact.findByIdAndUpdate(id, data, { new: true });
-    return result;
+ * update a contact
+ * @function update
+ * @param {*}  req
+ * @param {*} res
+ * @return
+ */
+export async function update(id, data) {
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No post with id: ${id}`);
+  const result = await Contact.findByIdAndUpdate(id, data, { new: true });
+  return result;
 }
 
 /**
- * delete an contact 
- *
- * @returns {Promise}
-*/
-exports.destroy = async function(contactId){
-    if (!mongoose.Types.ObjectId.isValid(contactId)) return res.status(404).send(`No contact with id: ${id}`);
-    const result = await Contact.findByIdAndRemove(contactId);
-    return result;
+ * destroy a contact
+ * @function destroy
+ * @param {*}  req
+ * @param {*} res
+ * @return
+ */
+export async function destroy(contactId) {
+  if (!mongoose.Types.ObjectId.isValid(contactId))
+    return res.status(404).send(`No contact with id: ${id}`);
+  const result = await Contact.findByIdAndRemove(contactId);
+  return result;
 }
