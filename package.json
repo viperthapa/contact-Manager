@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "nodemon server/index.js",
     "doc": "jsdoc -c jsdoc.json"
   },
   "author": "",

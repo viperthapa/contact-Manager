@@ -91,8 +91,8 @@ export const ContactListNew = (props) => {
                 <td>
                   {" "}
                   <FontAwesomeIcon
+                    className="faHeart"
                     icon={faHeart}
-                    style={{ marginLeft: "30px" }}
                   ></FontAwesomeIcon>
                 </td>
               ) : (
@@ -144,25 +144,19 @@ export const ContactListNew = (props) => {
       <div class="d-flex flex-column">
         {!!contacts.retreieve_data.length ? (
           <Link to="/add-contact">
-            <h3
-              className="contact-add ml-5 ps-5"
-              style={{ marginLeft: "290px" }}
-            >
+            <h3 className="contact-add-data ml-5 ps-5 ">
               {" "}
               <button className="btn btn-success">
-                <FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add
+                <FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>Add
               </button>
             </h3>
           </Link>
         ) : (
           <Link to="/add-contact">
-            <h3
-              className="contact-add ml-5 ps-5"
-              style={{ marginLeft: "180px" }}
-            >
+            <h3 className="ml-5 ps-5">
               {" "}
-              <button className="btn btn-success">
-                <FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>&nbsp;Add
+              <button className="contact-add-nodata btn btn-success">
+                <FontAwesomeIcon icon={faCirclePlus}></FontAwesomeIcon>Add
               </button>
             </h3>
           </Link>
@@ -170,7 +164,7 @@ export const ContactListNew = (props) => {
       </div>
       <div className="d-flex flex-row">
         <div className="contact-table">
-          <div class="d-flex flex-column" style={{ width: "20%" }}>
+          <div class="d-flex flex-column w-50">
             <table id="contact-list">
               <thead>
                 <tr>{renderHeader()}</tr>
@@ -180,16 +174,13 @@ export const ContactListNew = (props) => {
           </div>
         </div>
 
-        <div className="" style={{ width: "20%", marginLeft: "18em" }}>
+        <div className="detail-page w-25">
           {detail ? (
             <div className="contact-detail">
               <h1 className="text-black">
                 Detail
                 {detail.isFavourite ? (
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    style={{ marginLeft: "30px" }}
-                  ></FontAwesomeIcon>
+                  <FontAwesomeIcon icon={faHeart}></FontAwesomeIcon>
                 ) : (
                   <p></p>
                 )}

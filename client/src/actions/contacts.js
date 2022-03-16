@@ -1,7 +1,3 @@
-/*
-We will import all the list of actions from type.js and make asynchronous requests and that triggers the dispatch method
-
-*/
 import {
   CREATE_CONTACTS,
   RETRIEVE_CONTACTS,

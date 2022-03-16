@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const contactDataSchema = Joi.object({
+const contactSchema = Joi.object({
   name: Joi.string().min(5).max(50).required().messages({
     "string.empty": "This field is required",
     "string.pattern.base": "only allows alphabet i.e. a-Z",
@@ -46,16 +46,15 @@ const contactDataSchema = Joi.object({
     }),
 }).options({ abortEarly: false });
 
-function validateCreateContact(data) {
-  const result = contactDataSchema.validate(data);
-  let mapError = {};
-  if (result.error) {
-    Object.keys(result.error.details).map(function (key, index) {
-      let keyName = result.error.details[key].context.key;
-      return (mapError[keyName] = result.error.details[key].message);
-    });
+async function ValidateContactDetails(object) {
+  try {
+    const joiRes = contactSchema.validate(object, { abortEarly: false });
+    return joiRes;
+  } catch {
+    throw new Error(error);
   }
-  return mapError;
 }
 
-export default validateCreateContact;
+export default {
+  ValidateContactDetails,
+};
