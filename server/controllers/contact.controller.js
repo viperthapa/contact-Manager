@@ -1,7 +1,6 @@
 import "dotenv/config";
 import * as contactServices from "../service/contact.service";
-import validateCreateContact from "../validations/CreateContact";
-import validateUpdateContact from "../validations/UpdateContact";
+import ValidateContact from "../validations/contact";
 
 /**
  * GET api/contacts/
@@ -20,7 +19,7 @@ export async function all(req, res) {
 }
 
 /**
- * GEt api/contacts/<id>
+ * GET api/contacts/<id>
  * @summary get a single contact
  * @param {*} req
  * @param {*} res
@@ -45,10 +44,12 @@ export async function show(req, res) {
  */
 export async function create(req, res) {
   try {
-    const validatedData = validateCreateContact(req.body);
-    if (Object.keys(validatedData).length !== 0)
-      return res.status(400).send({ message: validatedData });
-
+    const validatedData = await ValidateContact.ValidateContactDetails(
+      req.body
+    );
+    if (validatedData.error) {
+      return res.status(400).json(validatedData.error);
+    }
     req.body.userid = req.user.id;
     const contactCreate = await contactServices.create(req.body);
     return res.status(201).json({ data: contactCreate });
@@ -65,9 +66,10 @@ export async function create(req, res) {
  * @returns {promise<any>}
  */
 export async function update(req, res) {
-  const checkValidate = validateUpdateContact(req.body);
-  if (Object.keys(checkValidate).length !== 0)
-    return res.status(400).send({ status: 400, err: checkValidate });
+  const validatedData = await ValidateContact.ValidateContactDetails(req.body);
+  if (validatedData.error) {
+    return res.status(400).json(validatedData.error);
+  }
   const contact = await contactServices.update(req.params.id, req.body);
   return res.status(200).send({
     status: 200,

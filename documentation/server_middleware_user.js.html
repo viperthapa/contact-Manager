@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: server/middleware/user.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: server/middleware/user.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import jwt from "jsonwebtoken";
+import config from "../config/auth";
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * Function to verify the token.
+ * @function verifyToken
+ * @param {*}  req
+ * @param {*} res
+ */
+async function verifyToken(req, res, next) {
+  const bearerHeader = req.headers["authorization"];
+  const token = bearerHeader &amp;&amp; bearerHeader.split(" ")[1];
+  if (token == null)
+    return res
+      .status(403)
+      .send({ error: "A token is required for authentication" });
+  jwt.verify(token, config.secret, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+export default verifyToken;
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -1,6 +1,5 @@
 import "dotenv/config";
-import validateRegisterUser from "../validations/CreateAuth";
-import validateLoginUser from "../validations/RequestAuth";
+import validateUser from "../validations/auth";
 import * as userService from "../service/auth.service";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -15,9 +14,15 @@ import config from "../config/auth";
  * @returns {object}
  */
 export async function register(req, res) {
-  const validatedData = validateRegisterUser(req.body);
-  if (Object.keys(validatedData).length !== 0)
-    return res.status(400).send({ status: 400, err: validatedData });
+  try {
+    const validatedData = await validateUser.ValidateUserRegister(req.body);
+    if (validatedData.error) {
+      return res.status(400).json(validatedData.error);
+    }
+  } catch (err) {
+    return err;
+  }
+
   const checkEmail = await userService.checkEmail(req.body.email);
   if (checkEmail) {
     return res
@@ -39,9 +44,14 @@ export async function register(req, res) {
  * @returns {string} - token
  */
 export async function login(req, res) {
-  const validatedData = validateLoginUser(req.body);
-  if (Object.keys(validatedData).length !== 0)
-    return res.status(400).send({ status: 400, err: validatedData });
+  try {
+    const validatedData = await validateUser.validateUserLogin(req.body);
+    if (validatedData.error) {
+      return res.status(400).json(validatedData.error);
+    }
+  } catch (err) {
+    return err;
+  }
 
   const user = await userService.checkEmail(req.body.email);
   if (!user) {

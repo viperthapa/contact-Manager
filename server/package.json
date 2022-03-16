@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js",
-    "test": "./node_modules/.bin/mocha --recursive --timeout 10000 && nyc --reporter=html --reporter=text mocha 'test/**/.js' --exit --timeout 10000 --grep"
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js"
   },
   "author": "",
   "license": "ISC",

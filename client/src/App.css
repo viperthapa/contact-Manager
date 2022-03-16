@@ -123,26 +123,18 @@ label {
   padding: 40px;
 }
 
-/*media query navbar*/
+.faHeart {
+  margin-left: "30px";
+}
 
-/*for mobile view*/
+.detail-page {
+  margin-left: 140px;
+}
 
-/* .open .navbar-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
+.contact-add-data {
+  margin-left: 160px;
+}
 
-  .navbar-nav {
-    display: none;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    height: calc(100vh - 50px);
-    width: 100%;
-  }
-
-  .navbar-nav navbar-element {
-    margin-bottom: 10px;
-  } */
+.contact-add-nodata {
+  margin-left: 90px;
+}
