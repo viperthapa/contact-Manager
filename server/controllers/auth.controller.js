@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken";
 import config from "../config/auth";
+import * as response from "../helpers/response";
 
 /**
  * Create a new user.
@@ -14,24 +15,17 @@ import config from "../config/auth";
  * @returns {object}
  */
 export async function register(req, res) {
-  try {
-    const validatedData = await validateUser.ValidateUserRegister(req.body);
-    if (validatedData.error) {
-      return res.status(400).json(validatedData.error);
-    }
-  } catch (err) {
-    return err;
+  const validatedData = await validateUser.ValidateUserRegister(req.body);
+  if (validatedData.error) {
+    return res.status(400).json(validatedData.error);
   }
-
   const checkEmail = await userService.checkEmail(req.body.email);
   if (checkEmail) {
-    return res
-      .status(409)
-      .json({ message: "User with this email already exist!" });
+    return response.failure(res, 409, "Email already exist");
   }
   try {
     const createUser = await userService.create(req.body);
-    res.status(201).json(createUser);
+    return response.success(res, 201, createUser);
   } catch (err) {
     return err;
   }

@@ -148,6 +148,7 @@ export const UpdateContact = (props) => {
   return (
     <div className="contactAdd">
       <div className="container">
+        <br></br>
         <form className="contact-form">
           <h1 id="contact-title" className="text-center">
             <FontAwesomeIcon icon={faUserPlus} />
