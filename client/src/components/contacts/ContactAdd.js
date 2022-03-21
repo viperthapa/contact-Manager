@@ -129,6 +129,7 @@ export const AddContact = (props) => {
   return (
     <div className="contactAdd">
       <div className="container">
+        <br></br>
         <form className="contact-form">
           <h1 id="contact-title" className="text-center">
             <FontAwesomeIcon icon={faUserPlus} />
@@ -281,26 +282,14 @@ export const AddContact = (props) => {
             />
           </div>
           <div className="form-group">
-            {contact.profile ? (
-              <button
-                onClick={saveContact}
-                type="submit"
-                id="submit"
-                className="submit-button"
-              >
-                Submit
-              </button>
-            ) : (
-              <button
-                onClick={saveContact}
-                type="submit"
-                id="submit"
-                className="submit-button"
-                disabled={true}
-              >
-                Submit
-              </button>
-            )}
+            <button
+              onClick={saveContact}
+              type="submit"
+              id="submit"
+              className="submit-button"
+            >
+              Submit
+            </button>
           </div>
         </form>
       </div>

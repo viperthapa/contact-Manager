@@ -45,7 +45,6 @@ async function validateUserLogin(object) {
     const joiRes = loginSchema.validate(object, {
       abortEarly: false,
     });
-    console.log("joi res", joiRes);
     return joiRes;
   } catch {
     throw new Error(error);
