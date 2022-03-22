@@ -2,8 +2,8 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { login } from "../services/auth-service";
-import { ShowToastr } from "../common/Toastr";
+import { login } from "../../services/auth-service";
+import { ShowToastr } from "../../common/Toastr";
 
 const required = (value) => {
   if (!value) {
@@ -14,25 +14,24 @@ const required = (value) => {
 const Login = (props) => {
   const form = useRef();
   const checkBtn = useRef();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-  };
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
+
+  const [userLogin, setuserLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (e) => {
+    const names = e.target.name;
+    const value = e.target.value;
+    setuserLogin({ ...userLogin, [names]: value });
   };
   const handleLogin = (e) => {
     e.preventDefault();
     setMessage("");
-    setLoading(true);
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
-      login(email, password).then(
+      login(userLogin.email, userLogin.password).then(
         () => {
           ShowToastr("Login successful!");
           props.history.push("/");
@@ -45,12 +44,9 @@ const Login = (props) => {
               error.response.data.message) ||
             error.message ||
             error.toString();
-          setLoading(false);
           setMessage(resMessage);
         }
       );
-    } else {
-      setLoading(false);
     }
   };
   return (
@@ -77,8 +73,8 @@ const Login = (props) => {
               type="text"
               className="form-control"
               name="email"
-              value={email}
-              onChange={onChangeEmail}
+              value={userLogin.email}
+              onChange={handleInput}
               validations={[required]}
             />
           </div>
@@ -90,16 +86,13 @@ const Login = (props) => {
               type="password"
               className="form-control"
               name="password"
-              value={password}
-              onChange={onChangePassword}
+              value={userLogin.password}
+              onChange={handleInput}
               validations={[required]}
             />
           </div>
           <div className="form-group mt-3">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
+            <button className="btn btn-primary btn-block">
               <span>Login</span>
             </button>
           </div>
