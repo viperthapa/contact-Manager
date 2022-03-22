@@ -2,8 +2,8 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import { register } from "../services/auth-service";
-import { ShowToastr } from "../common/Toastr";
+import { register } from "../../services/auth-service";
+import { ShowToastr } from "../../common/Toastr";
 
 //validation for mandatory fields
 const required = (value) => {
@@ -15,32 +15,31 @@ const required = (value) => {
 const Register = (props) => {
   const form = useRef();
   const checkBtn = useRef();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [registration, setRegistration] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-  };
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-  const onChangeName = (e) => {
-    const name = e.target.value;
-    setName(name);
+  const handleInput = (e) => {
+    const names = e.target.name;
+    const value = e.target.value;
+    setRegistration({ ...registration, [names]: value });
   };
 
   const handleRegister = (e) => {
     e.preventDefault();
-    setMessage("");
-    setSuccessful(false);
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
-      register(name, email, password).then(
+      register(
+        registration.name,
+        registration.email,
+        registration.password
+      ).then(
         (response) => {
           ShowToastr("Register successful!");
           props.history.push("/login");
@@ -78,8 +77,8 @@ const Register = (props) => {
                   type="text"
                   className="form-control"
                   name="name"
-                  value={name}
-                  onChange={onChangeName}
+                  value={registration.name}
+                  onChange={handleInput}
                   validations={[required]}
                 />
               </div>
@@ -91,8 +90,8 @@ const Register = (props) => {
                   type="text"
                   className="form-control"
                   name="email"
-                  value={email}
-                  onChange={onChangeEmail}
+                  value={registration.email}
+                  onChange={handleInput}
                   validations={[required]}
                 />
                 {message && (
@@ -116,8 +115,8 @@ const Register = (props) => {
                   type="password"
                   className="form-control"
                   name="password"
-                  value={password}
-                  onChange={onChangePassword}
+                  value={registration.password}
+                  onChange={handleInput}
                   validations={[required]}
                 />
               </div>
