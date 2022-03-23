@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { createContact } from "../../actions/contacts";
+import { createContact } from "../../actions/contactAction";
 import "../../style/custom.css";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";

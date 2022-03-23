@@ -1,7 +1,7 @@
 import { Route, Switch } from "react-router-dom";
 import Register from "../src/components/auth/Register";
 import Login from "../src/components/auth/Login";
-import { ContactListNew } from "./components/contacts/ContactListNew";
+import { ContactListNew } from "./components/contacts/ContactList";
 import { AddContact } from "./components/contacts/ContactAdd";
 import { UpdateContact } from "./components/contacts/ContactUpdate";
 import { Error } from "./Error";

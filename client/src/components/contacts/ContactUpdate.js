@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateContact } from "../../actions/contacts";
-import { getContactObj } from "../../services/ contact-service";
+import { updateContact } from "../../actions/contactAction";
+import { getContactObj } from "../../services/ contactServices";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ShowToastr } from "../../common/Toastr";

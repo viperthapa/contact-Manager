@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "../../../src/App.css";
-import { deleteContacts, retrieveContacts } from "../../actions/contacts";
+import { deleteContacts, retrieveContacts } from "../../actions/contactAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
@@ -205,21 +205,17 @@ export const ContactListNew = (props) => {
                   return (
                     <span key={element._id} className="ml-4 pl-5">
                       {element.home ? (
-                        <p className="ml-4 pl-5">
-                          &nbsp;&nbsp;&nbsp;Home: {element.home}
-                        </p>
+                        <p className="ps-3">Home: {element.home}</p>
                       ) : (
                         <p></p>
                       )}
                       {element.work ? (
-                        <p>&nbsp;&nbsp;&nbsp;work: {element.work}</p>
+                        <p className="ps-3">work: {element.work}</p>
                       ) : (
                         <p></p>
                       )}
                       {element.mobile ? (
-                        <p className="ml-4 pl-5">
-                          &nbsp;&nbsp;&nbsp;mobile: {element.mobile}
-                        </p>
+                        <p className="ps-3">mobile: {element.mobile}</p>
                       ) : (
                         <p></p>
                       )}
