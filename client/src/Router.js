@@ -13,8 +13,16 @@ const Router = () => {
       <Route exact path={["/"]} component={requireAuth(ContactListNew)} />
       <Route exact path={["/login"]} component={Login} />)
       <Route exact path={["/register"]} component={Register} />
-      <Route exact path={["/add-contact"]} component={AddContact} />
-      <Route exact path={["/update-contact/:id"]} component={UpdateContact} />
+      <Route
+        exact
+        path={["/add-contact"]}
+        component={requireAuth(AddContact)}
+      />
+      <Route
+        exact
+        path={["/update-contact/:id"]}
+        component={requireAuth(UpdateContact)}
+      />
       <Route exact path={["*"]} component={Error} />
     </Switch>
   );

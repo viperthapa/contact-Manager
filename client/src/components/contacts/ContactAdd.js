@@ -4,6 +4,7 @@ import { createContact } from "../../actions/contactAction";
 import "../../style/custom.css";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import validate from "../../validations/contactValidations";
 import { ShowToastr } from "../../common/Toastr";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -96,35 +97,6 @@ export const AddContact = (props) => {
         });
     }
   }, [error]);
-
-  const validate = (values) => {
-    const errors = {};
-    if (!values.name) {
-      errors.name = "Name is required!";
-    }
-    if (!values.email) {
-      errors.email = "Email is required!";
-    }
-    if (!values.phone[0]["home"]) {
-      errors.home = "Home contact is required!";
-    } else if (values.phone[0]["home"].length > 10) {
-      errors.home = "Phone cannot exceed more than 10 characters";
-    }
-    if (!values.phone[0]["work"]) {
-      errors.work = "Work contact is required!";
-    } else if (values.phone[0]["work"].length > 10) {
-      errors.work = "Phone cannot exceed more than 10 characters";
-    }
-    if (!values.phone[0]["mobile"]) {
-      errors.mobile = "Mobile contact is required!";
-    } else if (values.phone[0]["mobile"].length > 10) {
-      errors.mobile = "Phone cannot exceed more than 10 characters";
-    }
-    if (!values.profile) {
-      errors.image = "Image is required!";
-    }
-    return errors;
-  };
 
   return (
     <div className="contactAdd">
