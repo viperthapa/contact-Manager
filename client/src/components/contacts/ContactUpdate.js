@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateContact } from "../../actions/contactAction";
 import { getContactObj } from "../../services/ contactServices";
+import validate from "../../validations/contactValidations";
 import { storage } from "../../firebase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { ShowToastr } from "../../common/Toastr";
@@ -117,33 +118,6 @@ export const UpdateContact = (props) => {
         });
     }
   }, [error]);
-
-  const validate = (values) => {
-    const errors = {};
-    if (!values.name) {
-      errors.name = "Name is required!";
-    }
-    if (!values.email) {
-      errors.email = "Email is required!";
-    }
-    if (!values.phone[0]["home"]) {
-      errors.home = "Home contact is required!";
-    }
-    if (!values.phone[0]["work"]) {
-      errors.work = "Work contact is required!";
-    } else if (values.phone[0]["work"].length > 10) {
-      errors.work = "Phone cannot exceed more than 10 characters";
-    }
-    if (!values.phone[0]["mobile"]) {
-      errors.mobile = "Mobile contact is required!";
-    } else if (values.phone[0]["mobile"].length > 10) {
-      errors.mobile = "Phone cannot exceed more than 10 characters";
-    }
-    if (!values.profile) {
-      errors.image = "Image is required!";
-    }
-    return errors;
-  };
 
   return (
     <div className="contactAdd">
