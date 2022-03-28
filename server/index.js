@@ -3,13 +3,14 @@ import connect from "./config/database";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import router from "./routes/router.routes.js";
+import router from "./routes";
 connect();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
+
+//API Routes
 app.use("/api", router);
 
 const port = process.env.PORT || 5000;

@@ -9,10 +9,10 @@ import * as response from "../helpers/response";
 
 /**
  * Create a new user.
- * @param {string} name -name of user
- * @param {string} email - email of user
- * @param {string} password - password of user
- * @returns {object}
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {Function} next
  */
 export async function register(req, res) {
   const validatedData = await validateUser.ValidateUserRegister(req.body);
@@ -32,10 +32,11 @@ export async function register(req, res) {
 }
 
 /**
- * Create a new user.
- * @param {string} email - email of user
- * @param {string} password - password of user
- * @returns {string} - token
+ * login a user.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {Function} next
  */
 export async function login(req, res) {
   try {
@@ -75,10 +76,12 @@ export async function login(req, res) {
   });
 }
 
-/** Get a new access token
- * @param {*}  req
+/**
+ * get an access token .
+ *
+ * @param {*} req
  * @param {*} res
- * @returns {Promise<string>} token
+ * @param {Function} next
  */
 export async function refreshToken(req, res) {
   const requestToken = req.body.refresh_token;
@@ -121,10 +124,11 @@ export async function refreshToken(req, res) {
 }
 
 /**
- * Get all Users
+ * get all users.
+ *
  * @param {*} req
  * @param {*} res
- * @returns {Array}
+ * @param {Function} next
  */
 export async function all(req, res) {
   try {

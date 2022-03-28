@@ -3,27 +3,23 @@ import * as contactServices from "../service/contact.service";
 import ValidateContact from "../validations/contact";
 
 /**
- * GET api/contacts/
- * @summary Get all contacts
+ * Get all contacts.
+ *
  * @param {*} req
  * @param {*} res
- * @returns {Array}
+ * @param {Function} next
  */
 export async function all(req, res) {
-  try {
-    const contacts = await contactServices.list(req.user.id);
-    res.status(200).json(contacts);
-  } catch (error) {
-    return res.status(400).json({ status: 400, message: error.message });
-  }
+  const contacts = await contactServices.list(req.user.id);
+  res.status(200).json(contacts);
 }
 
 /**
- * GET api/contacts/<id>
- * @summary get a single contact
- * @param {*} req
- * @param {*} res
- * @returns {promise<any>}
+ * GET a contact by id
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
  */
 export async function show(req, res) {
   try {
@@ -36,11 +32,11 @@ export async function show(req, res) {
 }
 
 /**
- * POST api/contacts/
- * @summary create a contact
- * @param {*} req
- * @param {*} res
- * @returns {promise<any>}
+ * Create a new contact.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
  */
 export async function create(req, res) {
   try {
@@ -59,11 +55,11 @@ export async function create(req, res) {
 }
 
 /**
- * PUT api/contacts/<id>
- * @summary update a contact
- * @param {*} req
- * @param {*} res
- * @returns {promise<any>}
+ * update a contact.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
  */
 export async function update(req, res) {
   const validatedData = await ValidateContact.ValidateContactDetails(req.body);
@@ -79,11 +75,11 @@ export async function update(req, res) {
 }
 
 /**
- * DELETE api/contacts/<id>
- * @summary delete a contact
- * @param {*} req
- * @param {*} res
- * @returns {promise<any>}
+ * DELETE a contact.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
  */
 export async function remove(req, res) {
   const contact = await contactServices.destroy(req.params.id);
