@@ -47,7 +47,6 @@ export async function create(data) {
 
 /**
  * update a contact
- * @function update
  * @param {string}  contactId
  * @param {object} data -list of data
  * @returns {Promise} contact
