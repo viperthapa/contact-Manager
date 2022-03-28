@@ -2,7 +2,6 @@ import "dotenv/config";
 import connect from "./config/database";
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import router from "./routes";
 connect();
 

@@ -1,7 +1,8 @@
 import Joi from "joi";
 
+//validation schema
 const registerSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required().messages({
+  name: Joi.string().min(2).max(30).required().messages({
     "string.empty": "This field is required",
     "string.pattern.base": "only allows alphabet i.e. a-Z",
     "string.max":
@@ -19,6 +20,13 @@ const registerSchema = Joi.object({
   }),
 });
 
+/**
+ * Validate login user request.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 const loginSchema = Joi.object({
   email: Joi.string().min(5).max(200).required().messages({
     "string.empty": "This field is required",
@@ -40,6 +48,13 @@ async function ValidateUserRegister(object) {
   }
 }
 
+/**
+ * Validate register user request.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 async function validateUserLogin(object) {
   try {
     const joiRes = loginSchema.validate(object, {

@@ -46,6 +46,13 @@ const contactSchema = Joi.object({
     }),
 }).options({ abortEarly: false });
 
+/**
+ * Validate contact create/update request.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 async function ValidateContactDetails(object) {
   try {
     const joiRes = contactSchema.validate(object, { abortEarly: false });
