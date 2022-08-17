@@ -4,7 +4,7 @@ const general = {
   jwtExpiration: 3600,
   jwtRefreshExpiration: 3600,
   MONGO_URI:
-    "mongodb+srv://viper:shrestha@cluster0.8y3s0.mongodb.net/contact_dbv2?retryWrites=true&w=majority",
+    "your_mongo_url",
 };
 
 export default general;
